@@ -112,9 +112,13 @@ def hex_to_dec(hex_num):
         dec_num += hd_dict[hex_num[i]] * pow(16, i)
     return dec_num
 
+def raw_card_info(rdr):
+    """Returns the raw data for the card currently on the scanner as a string.  If there is no card, will return 0000000000000001."""
+    return str(binascii.hexlify(rdr.get_card_id()))
+
 def dec_card_id(rdr):
     """Returns the six numbers on the back of the Cal1 card currently on the scanner, or None if no card is present."""
-    hex_id_str = str(binascii.hexlify(rdr.get_card_id()))
+    hex_id_str = raw_card_info(rdr)
     if(hex_id_str == '0000000000000001'):
         return None
     return(hex_to_dec(hex_id_str[9:14])) # These are the digits that actually store the numbers on the card
@@ -132,6 +136,25 @@ def wait_until_none(rdr):
     while card_id:
         card_id = dec_card_id(rdr)
 
+def time_stamp():
+    """Returns the current time in the form year-month-day hour:minute:second"""
+    import time
+    import datetime
+    return datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+
+#TODO: convert to actual code
+def main():
+    """Continually waits for a card to be swiped, then inputs the name of the card holder into the check in spreadsheet."""
+    # authenticate / login / open spreadsheets
+    rdr = RFIDReader(RFIDReaderUSB())
+
+    while True:
+        card_id = wait_until_card(rdr)
+        time = time_stamp()
+        # convert from card id to name
+        # write name and time to spreadsheet
+        wait_until_none(rdr)
+
 
 if __name__=="__main__":
     rdr = RFIDReader(RFIDReaderUSB())
@@ -146,6 +169,8 @@ if __name__=="__main__":
     while True:
         card_id = wait_until_card(rdr)
         print('Card on reader: ' + str(card_id))
+        print('Raw data: ' + raw_card_info(rdr))
+        print(time_stamp())
         sys.stdout.flush()
         wait_until_none(rdr)
         print('Card off the reader.')

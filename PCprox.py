@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import usb.core
 import struct
+import rfid_check_in
 
 """Lower-level (libusb) code to interface with RFID reader"""
 class RFIDReaderUSB(object):
@@ -142,21 +143,17 @@ def time_stamp():
     import datetime
     return datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
-#TODO: convert to actual code
 def main():
     """Continually waits for a card to be swiped, then inputs the name of the card holder into the check in spreadsheet."""
-    # authenticate / login / open spreadsheets
     rdr = RFIDReader(RFIDReaderUSB())
-
     while True:
         card_id = wait_until_card(rdr)
-        time = time_stamp()
-        # convert from card id to name
-        # write name and time to spreadsheet
+        rfid_check_in.enter_info(card_id, time_stamp())
         wait_until_none(rdr)
 
-
 if __name__=="__main__":
+    main()
+
     rdr = RFIDReader(RFIDReaderUSB())
 
     import binascii

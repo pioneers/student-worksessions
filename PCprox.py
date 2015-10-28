@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import usb.core
 import struct
-import rfid_check_in
+import binascii
 
 """Lower-level (libusb) code to interface with RFID reader"""
 class RFIDReaderUSB(object):
@@ -104,60 +104,29 @@ class RFIDReader(object):
         ver = self._ll.exchange_bytes(RFIDReader.COMMAND_GET_VERSION)
         return ''.join((chr(x) for x in ver))
 
-def hex_to_dec(hex_num):
-    """Takes a hexadecimal number (in the form of a string) and returns the decimal integer corresponding to it."""
-    hd_dict = {'0':0, '1':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, 'a':10, 'b':11, 'c':12, 'd':13, 'e':14, 'f':15}
-    hex_num = hex_num[::-1]
-    dec_num = 0
-    for i in range(len(hex_num)):
-        dec_num += hd_dict[hex_num[i]] * pow(16, i)
-    return dec_num
-
-def raw_card_info(rdr):
-    """Returns the raw data for the card currently on the scanner as a string.  If there is no card, will return 0000000000000001."""
-    return str(binascii.hexlify(rdr.get_card_id()))
-
-def dec_card_id(rdr):
-    """Returns the six numbers on the back of the Cal1 card currently on the scanner, or None if no card is present."""
-    hex_id_str = raw_card_info(rdr)
+def hex_card_id(rdr):
+    """Returns the full id of the card currently on the scanner in hex, or None if no card is present."""
+    hex_id_str = str(binascii.hexlify(rdr.get_card_id()))
     if(hex_id_str == '0000000000000001'):
         return None
-    return(hex_to_dec(hex_id_str[9:14])) # These are the digits that actually store the numbers on the card
+    return hex_id_str
 
 def wait_until_card(rdr):
-    """Waits until a card is swiped, then returns the six numbers on the back."""
+    """Waits until a card is swiped, then returns the id of the card in hex."""
     card_id = None
     while not card_id:
-        card_id = dec_card_id(rdr)
+        card_id = hex_card_id(rdr)
     return card_id
 
 def wait_until_none(rdr):
     """Waits until there is no card on the scanner, then returns."""
-    card_id = dec_card_id(rdr)
+    card_id = hex_card_id(rdr)
     while card_id:
-        card_id = dec_card_id(rdr)
-
-def time_stamp():
-    """Returns the current time in the form year-month-day hour:minute:second"""
-    import time
-    import datetime
-    return datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-
-def main():
-    """Continually waits for a card to be swiped, then inputs the name of the card holder into the check in spreadsheet."""
-    rdr = RFIDReader(RFIDReaderUSB())
-    while True:
-        card_id = wait_until_card(rdr)
-        rfid_check_in.enter_info(card_id, time_stamp())
-        wait_until_none(rdr)
+        card_id = hex_card_id(rdr)
 
 if __name__=="__main__":
-    main()
-
     rdr = RFIDReader(RFIDReaderUSB())
 
-    import binascii
-    import time
     import sys
 
     print('Starting...')
@@ -166,8 +135,6 @@ if __name__=="__main__":
     while True:
         card_id = wait_until_card(rdr)
         print('Card on reader: ' + str(card_id))
-        print('Raw data: ' + raw_card_info(rdr))
-        print(time_stamp())
         sys.stdout.flush()
         wait_until_none(rdr)
         print('Card off the reader.')

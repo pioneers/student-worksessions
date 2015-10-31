@@ -35,7 +35,7 @@ if __name__ == "__main__":
 	# Open the worksheet
 	gc = gspread.authorize(credentials)
 	#TODO: put proper worksheet here
-	test_wks = gc.open("gspread test").sheet1
+	test_wks = gc.open("gspread test").get_worksheet(0)
 
 	# Initialize the reader
 	rdr = PCprox.RFIDReader(PCprox.RFIDReaderUSB())

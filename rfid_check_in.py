@@ -38,14 +38,14 @@ if __name__ == "__main__":
 	test_wks = gc.open("gspread test").sheet1
 
 	# Initialize the reader
-	rdr = PCprox.RFIDReader(RFIDReaderUSB())
+	rdr = PCprox.RFIDReader(PCprox.RFIDReaderUSB())
 
 	print("Ready to scan.")
-	sys.stout.flush()
+	sys.stdout.flush()
 
 	while True:
 		# Find the raw information on the next card scanned
-		hex_id = Pcprox.wait_until_card(rdr)
+		hex_id = PCprox.wait_until_card(rdr)
 
 		# Convert the raw information to the 6 numbers on the back of the cal1 card
 		dec_id = hex_to_dec(hex_id[9:14])
@@ -54,4 +54,4 @@ if __name__ == "__main__":
 		enter_info(test_wks, dec_id, time_stamp())
 
 		# Wait until the card is off the reader before scanning again
-		Pcprox.wait_until_none(rdr)
+		PCprox.wait_until_none(rdr)

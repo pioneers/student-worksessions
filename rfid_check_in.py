@@ -28,14 +28,14 @@ def hex_to_dec(hex_num):
 
 if __name__ == "__main__":
 	# Authenticate credentials
-	json_key = json.load(open('check_in.json'))
+	json_key = json.load(open('service_acct.json'))
 	scope = ['https://spreadsheets.google.com/feeds']
 	credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
 
 	# Open the worksheet
 	gc = gspread.authorize(credentials)
 	#TODO: put proper worksheet here
-	test_wks = gc.open("gspread test").get_worksheet(0)
+	sign_in_wks = gc.open("gspread test").get_worksheet(0)
 
 	# Initialize the reader
 	rdr = PCprox.RFIDReader(PCprox.RFIDReaderUSB())
@@ -51,7 +51,7 @@ if __name__ == "__main__":
 		dec_id = hex_to_dec(hex_id[9:14])
 
 		# Write the card info to the spreadsheet
-		enter_info(test_wks, dec_id, time_stamp())
+		enter_info(sign_in_wks, dec_id, time_stamp())
 
 		# Wait until the card is off the reader before scanning again
 		PCprox.wait_until_none(rdr)

@@ -110,11 +110,23 @@ def narrow(students):
 	print("	(5) Emergency Contact Form status")
 	print("	(6) Liability Form status")
 	sys.stdout.flush()
-	crit = int(user_input())
+	try:
+		crit = int(user_input())
+	except ValueError:
+		print("Not an accpetable input")
+		pause()
+		narrow(students)
+	if not crit in range(1, 7):
+		print("Not an accpetable input")
+		pause()
+		narrow(students)
 	if crit >= 4:
 		crit += 1 # This makes it match up with the column numbers on the spreadsheet
-	#TODO: Deal with the special case of RFID number (use the scanner)
-	search = user_input("Search for?")
+	if crit == 5:
+		print("Please scan the card you're looking for.")
+		search = PCprox.wait_until_card(rdr)
+	else:
+		search = user_input("Search for?")
 	print("Searching...")
 	sys.stdout.flush()
 	new_students = []
@@ -140,12 +152,18 @@ def narrow(students):
 	n = user_input("Try another search with the new list of students? (Y/N)")
 	if n == 'Y':
 		narrow(new_students)
+		return
+	if len(new_students) == 1:
+		c = user_input("Edit information for this student? (Y/N)")
+		if c == 'Y':
+			update_info(new_students[0])
 
 def update_worksheet():
 	"""Updates the spreadsheet this program can edit to match the master spreadsheet."""
 	print("Fetching student information...")
 	sys.stdout.flush()
 	master_wks = gc.open("Registration test").get_worksheet(0)
+	# Contains lists for schools, last names, first names, ECF status, and LF status in that order
 	master_info = [master_wks.col_values(2), master_wks.col_values(4), master_wks.col_values(3), master_wks.col_values(20), master_wks.col_values(21)]
 	# Make sure all the lists have the same length (they should, but just to be safe)
 	master_len = max([len(lst) for lst in master_info])
@@ -205,6 +223,48 @@ def update_worksheet():
 							student_wks.update_cell(row, 7, 'Y')
 						break
 
+def update_info(student):
+	"""Takes the row number of a student in student_wks, and gives the option to change their information."""
+	print("Current information:")
+	print_students([student])
+	print("Update")
+	print("	(1) School")
+	print("	(2) Last Name")
+	print("	(3) First Name")
+	print("	(4) QR number")
+	print("	(5) RFID number")
+	print("	(6) Emergency Contact Form status")
+	print("	(7) Liability Form status")
+	sys.stdout.flush()
+	try:
+		col = int(user_input())
+	except ValueError:
+		print("Not an accpetable input")
+		pause()
+		update_info(student)
+	if not col in range(1, 8):
+		print("Not an accpetable input")
+		pause()
+		update_info(student)
+	if col == 5:
+		print("Please scan new card.")
+		sys.stdout.flush()
+		new_info = PCprox.wait_until_card(rdr)
+	elif col == 6:
+		if student_wks.cell(student, 6).value == 'N':
+			new_info = '?'
+		else:
+			new_info = 'N'
+	elif col == 7:
+		if student_wks.cell(student, 7).value == 'N':
+			new_info = '?'
+		else:
+			new_info = 'N'
+	else:
+		new_info = user_input("What is the new information?")
+	student_wks.update_cell(student, col, new_info)
+	if user_input("Edit more information? (Y/N)") == 'Y':
+		update_info(student)
 
 if __name__ == "__main__":
 	# Authenticate credentials

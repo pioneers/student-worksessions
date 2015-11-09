@@ -6,6 +6,12 @@ import sys
 import time
 import datetime
 
+"""import httplib2
+import pprint
+
+from apiclient.discovery import build
+from decrypt import leaky_decrypt"""
+
 #TODO: convert from number to name (and put the name in the worksheet instead)
 def enter_info(wks, id_num, time):
 	"""Takes an id number and a time stamp and writes them into the first available row in the worksheet wks."""
@@ -27,15 +33,57 @@ def hex_to_dec(hex_num):
     return dec_num
 
 if __name__ == "__main__":
+
 	# Authenticate credentials
 	json_key = json.load(open('service_acct.json'))
 	scope = ['https://spreadsheets.google.com/feeds']
 	credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
 
+	"""http = httplib2.Http()
+	http = credentials.authorize(http)
+
+	#return build('admin', 'directory_v1', http=http)
+
+
+	directory_service = build('admin', 'directory_v1', http=http)
+
+	all_users = []
+	page_token = None
+	params = {'customer': 'my_customer'}
+
+	while True:
+	  try:
+	    if page_token:
+	      params['pageToken'] = page_token
+	    current_page = directory_service.users().list(**params).execute()
+
+	    all_users.extend(current_page['users'])
+	    page_token = current_page.get('nextPageToken')
+	    if not page_token:
+	      break
+	  except errors.HttpError as error:
+	    print 'An error occurred: %s' % error
+	    break
+	for user in all_users:
+
+	  #print user
+	  name = user['name']
+	  
+	  if 'organizations' in user:
+	    try:
+	      org = user['organizations'][0]
+	      txt = org['costCenter']
+	      txt = str(txt)
+	      out = name['givenName'] + ','+ name['familyName'] + ',' + leaky_decrypt(txt) + '\n'
+	      print out
+	      fil.write(out)
+	    except:
+	      print("error with " + str(name['givenName']))"""
+
 	# Open the worksheet
 	gc = gspread.authorize(credentials)
 	#TODO: put proper worksheet here
-	sign_in_wks = gc.open("gspread test").get_worksheet(0)
+	sign_in_wks = gc.open_by_url("https://docs.google.com/spreadsheets/d/1Jp8IymmVmOIj2L7cNuEoG6Qs_YW7UnofbcvhoqibPqY/edit#gid=0").get_worksheet(0)
 
 	# Initialize the reader
 	rdr = PCprox.RFIDReader(PCprox.RFIDReaderUSB())

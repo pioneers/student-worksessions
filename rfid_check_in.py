@@ -7,17 +7,38 @@ import time
 import datetime
 
 import httplib2
+from httplib import BadStatusLine
+from socket import error as socket_error
 import pprint
 
 from apiclient.discovery import build
 from decrypt import id_decrypt
+ 
+from apiclient import discovery
+import oauth2client
+from oauth2client import client
+from oauth2client import tools
+
+#TODO: put proper worksheet here
+WKS_URL = "https://docs.google.com/spreadsheets/d/1cRMzpYBRWyERmE_bfsM7Vu_2u3uBLzXUHlWkVhBNgZ0/edit#gid=0"
 
 #TODO: convert from number to name (and put the name in the worksheet instead)
-def enter_info(wks, id_num, time):
-	"""Takes an id number and a time stamp and writes them into the first available row in the worksheet wks."""
-	row = max(len(wks.col_values(1)), len(wks.col_values(2))) + 1
-	wks.update_cell(row, 1, str(id_num))
-	wks.update_cell(row, 2, time)
+def enter_info(wks, name, time):
+	"""Takes a name and a time stamp and writes them into the first available row in the worksheet wks."""
+	try:
+		row = max(len(wks.col_values(1)), len(wks.col_values(2))) + 1
+		wks.update_cell(row, 1, name)
+		wks.update_cell(row, 2, time)
+	except (socket_error, BadStatusLine):
+		print("Lost connection to file.  Reconnecting...")
+		sys.stdout.flush()
+		signal_failure(rdr)
+		gc = gspread.authorize(credentials)
+		# TODO: Find a better way to do this?
+		global sign_in_wks
+		sign_in_wks = gc.open_by_url(WKS_URL).get_worksheet(0)
+		print("Please try scanning again.")
+		sys.stdout.flush()
 
 def time_stamp():
     """Returns the current time in the form year-month-day hour:minute:second"""
@@ -32,23 +53,45 @@ def hex_to_dec(hex_num):
         dec_num += hd_dict[hex_num[i]] * pow(16, i)
     return dec_num
 
+def signal_failure(rdr):
+	"""Signals that the scan failed by flashing the light amber and beeping."""
+	rdr.set_led_state(True, True) # flash the light yellow
+	rdr.beep(3)
+	rdr.set_led_auto()
+
 if __name__ == "__main__":
 
 	# Authenticate credentials
-	json_key = json.load(open('service_acct.json'))
-	scope = ['https://spreadsheets.google.com/feeds']
-	credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
+	"""json_key = json.load(open('service_acct.json'))
+	scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/admin.directory.user.readonly']
+	credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)"""
+	CLIENT_SECRETS_FILE = 'client_secrets.json'
+	SCOPES = [
+	  'https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/admin.directory.user.readonly'
+	]
+ 
+	flags = tools.argparser.parse_args()
+	storage = oauth2client.file.Storage('storage.json')
+
+	flow = client.flow_from_clientsecrets(
+    CLIENT_SECRETS_FILE,
+    scope=SCOPES,
+    redirect_uri='urn:ietf:wg:oauth:2.0:oob')
+
+	credentials = tools.run_flow(flow, storage, flags)
+
+	http = credentials.authorize(httplib2.Http())
 
 	print('Fetching user information...')
 	sys.stdout.flush()
-	http = httplib2.Http()
-	http = credentials.authorize(http)
+	#http = httplib2.Http()
+	#http = credentials.authorize(http)
 
 	directory_service = build('admin', 'directory_v1', http=http)
 
 	all_users = []
 	page_token = None
-	params = {'customer': 'my_customer'}
+	params = {'customer': 'C03oalt22'}
 	ids = {}
 
 	while True:
@@ -67,53 +110,46 @@ if __name__ == "__main__":
 			sys.stdout.flush()
 			break
 	for user in all_users:
-		#print user
 		name = user['name']
 		if 'organizations' in user:
 			try:
 				org = user['organizations'][0]
 				txt = org['costCenter']
 				txt = str(txt)
-				#out = name['givenName'] + ','+ name['familyName'] + ',' + leaky_decrypt(txt) + '\n'
-				name = name['givenName'] + ' ' + name['familyName']
-				ids.update({leaky_decrypt(txt): name})
+				full_name = name['givenName'] + ' ' + name['familyName']
+				ids.update({id_decrypt(txt): full_name})
 			except:
-				print("error loading " + str(name['givenName']))
+				print("error loading " + name['givenName'] + ' ' + name['familyName'])
 				sys.stdout.flush()
 
-	while True:
-		print 'Search for an id number:'
-		sys.stdout.flush()
-		search_num = raw_input()
-		if search_num in ids.keys():
-			print ids[search_num]
-		else:
-			print "Didn't find that id..."
-		sys.stdout.flush()
-		raw_input() # Wait until they hit enter to continue
 
-
-	exit() # Just want to test the user information part right now
 	# Open the worksheet
 	gc = gspread.authorize(credentials)
-	#TODO: put proper worksheet here
-	sign_in_wks = gc.open_by_url("https://docs.google.com/spreadsheets/d/1Jp8IymmVmOIj2L7cNuEoG6Qs_YW7UnofbcvhoqibPqY/edit#gid=0").get_worksheet(0)
+	sign_in_wks = gc.open_by_url(WKS_URL).get_worksheet(0)
 
 	# Initialize the reader
 	rdr = PCprox.RFIDReader(PCprox.RFIDReaderUSB())
 
-	print("Ready to scan.")
-	sys.stdout.flush()
-
 	while True:
+		print("\n\nReady to scan.")
+		sys.stdout.flush()
+
 		# Find the raw information on the next card scanned
 		hex_id = PCprox.wait_until_card(rdr)
 
 		# Convert the raw information to the 6 numbers on the back of the cal1 card
 		dec_id = hex_to_dec(hex_id[9:14])
 
-		# Write the card info to the spreadsheet
-		enter_info(sign_in_wks, dec_id, time_stamp())
+		try:
+			name = ids[str(dec_id)]
+			print "Welcome, " + name
+			sys.stdout.flush()
+			enter_info(sign_in_wks, name, time_stamp())
+		except KeyError:
+			print "Card number not found..."
+			sys.stdout.flush()
+			signal_failure(rdr)
+			time.sleep(.5)
 
 		# Wait until the card is off the reader before scanning again
 		PCprox.wait_until_none(rdr)

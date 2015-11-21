@@ -22,11 +22,13 @@ from oauth2client import tools
 #TODO: put proper worksheet here
 WKS_URL = "https://docs.google.com/spreadsheets/d/1cRMzpYBRWyERmE_bfsM7Vu_2u3uBLzXUHlWkVhBNgZ0/edit#gid=0"
 
-#TODO: convert from number to name (and put the name in the worksheet instead)
 def enter_info(wks, name, time):
-	"""Takes a name and a time stamp and writes them into the first available row in the worksheet wks."""
+	"""Takes a name and a time stamp and writes them into the first available row in worksheet wks.
+	If no row is available, will add an extra row."""
 	try:
 		row = max(len(wks.col_values(1)), len(wks.col_values(2))) + 1
+		if wks.row_count < row:
+			wks.add_rows(1)
 		wks.update_cell(row, 1, name)
 		wks.update_cell(row, 2, time)
 	except (socket_error, BadStatusLine):

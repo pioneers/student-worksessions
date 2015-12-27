@@ -19,28 +19,57 @@ import oauth2client
 from oauth2client import client
 from oauth2client import tools
 
-#TODO: put proper worksheet here
+#TODO: put proper names here
 WKS_URL = "https://docs.google.com/spreadsheets/d/1cRMzpYBRWyERmE_bfsM7Vu_2u3uBLzXUHlWkVhBNgZ0/edit#gid=0"
+LOG_SHEET = "Staff" # name of the sheet to log names on
+ERR_SHEET = "Error Log" # name of the sheet to log errors to
+
+#Keep these up to date
+TIME_COL = 1 # column to log timestamps to (1 indexed)
+NAME_COL = 2 # column to log names to (1 indexed)
+ERR_ID_COL = 1 # column in the error log sheet to log id numbers
+ERR_NAME_COL = 2 # column in the error log sheet to log names
 
 def enter_info(wks, name, time):
 	"""Takes a name and a time stamp and writes them into the first available row in worksheet wks.
 	If no row is available, will add an extra row."""
 	try:
-		row = max(len(wks.col_values(1)), len(wks.col_values(2))) + 1
+		row = max(len(wks.col_values(TIME_COL)), len(wks.col_values(NAME_COL))) + 1
 		if wks.row_count < row:
 			wks.add_rows(1)
-		wks.update_cell(row, 1, name)
-		wks.update_cell(row, 2, time)
+		wks.update_cell(row, NAME_COL, name)
+		wks.update_cell(row, TIME_COL, time)
+		print("Welcome, " + name)
+		sys.stdout.flush()
 	except (socket_error, BadStatusLine):
 		print("Lost connection to file.  Reconnecting...")
 		sys.stdout.flush()
-		signal_failure(rdr)
-		gc = gspread.authorize(credentials)
-		# TODO: Find a better way to do this?
-		global sign_in_wks
-		sign_in_wks = gc.open_by_url(WKS_URL).get_worksheet(0)
+		reconnect()
 		print("Please try scanning again.")
 		sys.stdout.flush()
+
+def log_error(wks, name, id_num):
+	"""Takes a name and an id, and writes them to the first available row in the error log worksheet wks.
+	If no row is available, will add an extra row."""
+	try:
+		row = max(len(wks.col_values(ERR_ID_COL)), len(wks.col_values(ERR_NAME_COL))) + 1
+		if wks.row_count < row:
+			wks.add_rows(1)
+		wks.update_cell(row, ERR_NAME_COL, name)
+		wks.update_cell(row, ERR_ID_COL, id_num)
+	except (socket_error, BadStatusLine):
+		print("Lost connection to file.  Reconnecting...")
+		sys.stdout.flush()
+		reconnect()
+		print("Please try scanning again.")
+		sys.stdout.flush()
+
+def reconnect():
+	"""Reconnects to the worksheet."""
+	global sign_in_wks, error_log_wks
+	spreadsheet = gc.open_by_url(WKS_URL)
+	sign_in_wks = spreadsheet.worksheet(LOG_SHEET)
+	error_log_wks = spreadsheet.worksheet(ERR_SHEET)
 
 def time_stamp():
     """Returns the current time in the form year-month-day hour:minute:second"""
@@ -127,7 +156,9 @@ if __name__ == "__main__":
 
 	# Open the worksheet
 	gc = gspread.authorize(credentials)
-	sign_in_wks = gc.open_by_url(WKS_URL).get_worksheet(0)
+	spreadsheet = gc.open_by_url(WKS_URL)
+	sign_in_wks = spreadsheet.worksheet(LOG_SHEET)
+	error_log_wks = spreadsheet.worksheet(ERR_SHEET)
 
 	# Initialize the reader
 	rdr = PCprox.RFIDReader(PCprox.RFIDReaderUSB())
@@ -143,15 +174,17 @@ if __name__ == "__main__":
 		dec_id = hex_to_dec(hex_id[9:14])
 
 		try:
-			name = ids[str(dec_id)]
-			print "Welcome, " + name
-			sys.stdout.flush()
+			name = ids[str(dec_id)] # This will throw a KeyError if the id number isn't found
 			enter_info(sign_in_wks, name, time_stamp())
 		except KeyError:
-			print "Card number not found..."
+			print("Card not recognized!")
+			print("If you wish to log the error, please enter your name.")
 			sys.stdout.flush()
-			signal_failure(rdr)
-			time.sleep(.5)
+			name = raw_input()
+			if name != "":
+				log_error(error_log_wks, name, dec_id)
+				enter_info(sign_in_wks, name, time_stamp())
+			# If name is "", they don't want to log the error.
 
 		# Wait until the card is off the reader before scanning again
 		PCprox.wait_until_none(rdr)

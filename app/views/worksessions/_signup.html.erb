@@ -1,0 +1,9 @@
+<p id="notice"><%= flash[:notice] %></p>
+<% @worksessions.each do |worksession| %>
+	<% if worksession.free %>
+	<tr>
+		<%= worksession.date %>
+	    <%= worksession.begin_at %>
+	    <%= worksession.end_at %>
+	</tr>
+	<td><%= link_to 'Sign Up', signup_path(worksession.id) %></td>

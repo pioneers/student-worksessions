@@ -1,0 +1,8 @@
+<%= simple_form_for(@worksession) do |f| %>
+  <%= f.input :date, :as => :date_picker %>
+  
+  <%= f.input :begin_at, :as => :time_picker %>
+  <%= f.input :end_at, :as => :time_picker %>
+  <%= f.input :notes, as: :text %>
+  <%= f.button :submit %>
+<% end %>

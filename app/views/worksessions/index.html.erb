@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Worksessions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <table style="width:100%">
+    <tr>
+        <th>Date</th>
+        <th>Begin Time</th> 
+        <th>End Time</th>
+        <th>Notes</th>
+      </tr>
+    <% @worksessions.each do |worksession| %>
+      <% if current_user.worksessions.include? worksession or current_user.admin%>
+      <tr>
+        <td><%= worksession.date.strftime("%m/%d/%Y") %></td>
+        <td><%= worksession.begin_at.strftime("%I:%M %P") %></td> 
+        <td><%= worksession.end_at.strftime("%I:%M %P")%></td>
+        <td><%= worksession.notes %></td>
+        <% if current_user.admin %>
+        <td><%= link_to 'Edit', edit_worksession_path(worksession) %></td>
+          <td><%= link_to 'Destroy', worksession_path(worksession), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% else %>
+          <td><%= link_to 'Cancel', cancel_path(worksession, user_id: current_user) %></td>
+        <% end %>
+      </tr>
+       <% end %>
+    <% end %>
+    </table>
+
+   
+  </tbody>
+</table>
+
+<br>
+<% if current_user.admin %>
+  <%= link_to 'New Worksession', new_user_worksession_path(current_user) %>
+<% end %>

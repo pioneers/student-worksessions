@@ -1,8 +1,9 @@
-<%= simple_form_for(@worksession) do |f| %>
-  <%= f.input :date, :as => :date_picker %>
+<%= bootstrap_form_for(@worksession) do |f| %>
+
+  <%= f.date_select :date %>
   
-  <%= f.input :begin_at, :as => :time_picker %>
-  <%= f.input :end_at, :as => :time_picker %>
-  <%= f.input :notes, as: :text %>
-  <%= f.button :submit %>
+  <%= f.time_select :begin_at %>
+  <%= f.time_select :end_at %>
+  <%= f.text_area :notes, as: :text %>
+  <%= f.button :Submit, class: 'btn btn-default'  %>
 <% end %>

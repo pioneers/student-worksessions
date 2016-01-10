@@ -10,20 +10,68 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require bootstrap-datetimepicker
+ *= require rails_bootstrap_forms
+ *= require fullcalendar
  *= require_tree .
  *= require_self
  */
- *= require bootstrap-datetimepicker
-ul.hmenu {
-	position: static;
- 	list-style: none; 
-	margin: 0 0 2em;
-  	padding: 0;
-  	
 
+ 
+
+@import "bootstrap";
+@import "bootstrap-sprockets";
+@import 'bootstrap-datetimepicker';
+
+
+body {
+  padding-top: 60px;
+  padding-left: 60px;
+  padding-right: 60px;
+  padding-bottom: 40px;
+
+}
+
+section {
+  overflow: auto;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.center {
+  text-align: center;
+}
+
+.center h1 {
+  margin-bottom: 10px;
+}
+
+ul.hmenu {
+  list-style: none; 
+  margin: 0 0 2em;
+  padding: 0;
 }
 
 ul.hmenu li {
   display: inline;  
-
 }
+.nav_bar-header{
+    width:200px;
+    margin-left:8.3333% !important;
+}
+.content{
+    margin-top:100px;
+}
+.container {
+    margin-left:35px;
+}
+thead {
+  text-align: center;
+}
+
+#signth {
+  padding-left: 15px;
+}
+

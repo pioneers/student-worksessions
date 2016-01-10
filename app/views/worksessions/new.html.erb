@@ -1,5 +1,9 @@
-<h1>Sign Up for a Worksession</h1>
+<% if flash[:error] %>
+    <div class="notice"><%= flash[:error] %></div>
+  <% end %>
+
+<h1>Create a Worksession</h1>
 
 <%= render 'form' %>
 
-<%= link_to 'Back', user_worksessions_path %>
+<%= link_to 'Back', worksessions_path, class: 'btn btn-default '  %>

@@ -50,4 +50,10 @@ gem 'momentjs-rails', '~> 2.9', :github => 'derekprior/momentjs-rails'
 gem 'fullcalendar-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'simple_form'
+gem 'bootstrap-sass', '~> 3.2.0'
+gem 'autoprefixer-rails'
+gem 'bootstrap_form'
+gem "twitter-bootstrap-rails", :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+gem 'bootstrap-datetimepicker-rails'
+
 

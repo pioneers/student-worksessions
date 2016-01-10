@@ -1,4 +1,5 @@
 <p id="notice"><%= flash[:notice] %></p>
+“<div id="calendar">
 <% @worksessions.each do |worksession| %>
 	<% if worksession.free %>
 	<tr>
@@ -7,3 +8,4 @@
 	    <%= worksession.end_at %>
 	</tr>
 	<td><%= link_to 'Sign Up', signup_path(worksession.id) %></td>
+	</div>“

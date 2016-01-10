@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { sessions: "users/sessions" }
   devise_scope :user do
     authenticated :user do
-      root 'worksessions#index', as: :authenticated_root
+      root 'worksessions#homepage', as: :authenticated_root
     end
 
     unauthenticated do
@@ -12,10 +12,14 @@ Rails.application.routes.draw do
   resources :users do
       resources :worksessions
   end
+  get 'worksessions/available' => 'worksessions#available', as: :available
   resources :worksessions
   
-
+  resources :worksession do
+    get :get_events, on: :collection
+  end
   post 'worksessions/:id/sign_up' => 'worksessions#sign_up', as: :signup
+
   get 'worksessions/:id/cancel' => 'worksessions#cancel', as: :cancel
   
   # The priority is based upon order of creation: first created -> highest priority.

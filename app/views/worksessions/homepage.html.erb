@@ -1,0 +1,74 @@
+<p id="notice"><%= notice %></p>            
+  <h1 class = "center">Listing Future Worksessions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <table style="width:100%" class = 'table-striped'>
+    <tr>
+        <th>Date</th>
+        <th>Begin Time</th> 
+        <th>End Time</th>
+        <th>Status</th>
+        <th>Team</th>
+        <th>Notes</th>
+        <th>Edit</th>
+        <th>Destroy</th>
+      </tr>
+    <% @worksessions = @worksessions.sort_by{|a| a.begin_at.to_i} %>
+
+      <% @worksessions.each do |worksession| %>
+      <% if worksession.end_at > @today%>
+        <tr>
+          <td><%= worksession.date.in_time_zone.strftime("%m/%d/%Y") %></td>
+          <td><%= worksession.begin_at.in_time_zone.strftime("%I:%M %P") %></td> 
+          <td><%= worksession.end_at.in_time_zone.strftime("%I:%M %P")%></td>
+          <% if not worksession.free? %>
+            <td>Taken</t>
+            <td><%= User.find(worksession.user_id).team_name %> </td>
+          <% else %>
+            <td>Free</t>
+            <td>  </td>
+          <% end %>
+          <td><%= worksession.notes %></td>
+          <td><%= link_to 'Edit', edit_worksession_path(worksession), class: 'btn btn-default btn-sm' %></td>
+            <td><%= link_to 'Destroy', worksession_path(worksession), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-sm' %></td>
+        </tr>
+      <% end %>
+      <% end %>
+      </table>
+      <h1 class = "center">Listing Previous Worksessions</h1>
+      <table style="width:100%" class = 'table-striped'>
+      <tr>
+        <th>Date</th>
+        <th>Begin Time</th> 
+        <th>End Time</th>
+        <th>Notes</th>
+      </tr>
+    <% @worksessions = @worksessions.sort_by{|a| a.begin_at.to_i} %>
+    <% @worksessions.each do |worksession| %>
+      <% if worksession.end_at <= @today %>
+        <tr>
+        <td><%= worksession.date.strftime("%m/%d/%Y") %></td>
+        <td><%= worksession.begin_at.strftime("%I:%M %P") %></td> 
+        <td><%= worksession.end_at.strftime("%I:%M %P")%></td>
+
+        <td><%= worksession.notes %></td>
+
+          </tr>
+          <% end %>
+        <% end %>
+      </table>
+        </tbody>
+
+
+
+
+
+<td> <%= link_to 'New Worksession', new_user_worksession_path(current_user), class: 'btn btn-default btn'%> </td>
+

@@ -1,0 +1,46 @@
+<p id="notice"><%= notice %></p>
+<div id="calendar"> </div>
+  <h1 class = "center">Available Worksessions</h1>
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <table style="width:100%" class = 'table-striped'>
+      <thead class="thead-inverse">
+    <tr>
+
+        <th>Date</th>
+        <th>Begin Time</th> 
+        <th>End Time</th>
+        <th id = "#signth">Sign Up </th>
+      </tr>
+    </thead>
+    <% @worksessions = @worksessions.sort_by{|a| a.begin_at.to_i} %>
+    <% @worksessions.each do |worksession| %>
+      <% if worksession.free and worksession.end_at > @today%>
+      <tr>
+        <td><%= worksession.date.strftime("%m/%d/%Y") %></td>
+        <td><%= worksession.begin_at.strftime("%I:%M %P") %></td> 
+        <td><%= worksession.end_at.strftime("%I:%M %P")%></td>
+        <th><%= form_tag signup_path(worksession) do %>
+            <%= text_field_tag :notes, nil, :placeholder => 'Add a note' %>
+            <%= submit_tag 'Sign Up', class: 'submit' %>
+          <% end %>
+          </th>
+      </tr>
+       <% end %>
+    <% end %>
+    </table>
+
+   
+  </tbody>
+</table>
+
+<br>
+<% if current_user.admin %>
+  
+<% end %>

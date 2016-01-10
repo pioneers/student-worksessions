@@ -6,10 +6,28 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<ul >
-  <%= render 'devise/menu/login_items' %>
-</ul>
 
+
+<%= nav_bar :fixed => :top do %>
+	<%= menu_group do %>
+		<%= render 'devise/menu/login_items' %>
+	<% if user_signed_in? %>
+		<% if current_user.admin? %>
+		    <%= menu_item "All Worksessions", authenticated_root_path %>
+		    <%= menu_item "Teams", users_path%>
+		<% else %>
+			<%= menu_group do %>
+				<%= menu_item "Your Worksessions", authenticated_root_path %>
+		    	<%= menu_item "Worksession Sign-Up", available_path%>
+		    <% end %>
+		<% end %>
+	    <% end %>
+    <% end %>
+<% end %>
+
+<% if not current_user.nil? %>
+<div> Welcome <%= current_user.team_name %> </div>
+<%end%>
 <body>
 <%= yield %>
 </body>

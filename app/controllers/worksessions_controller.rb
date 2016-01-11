@@ -171,19 +171,17 @@ class WorksessionsController < ApplicationController
     end
 
     def divide_worksessions
-      begin_time = DateTime::civil(params[:worksession]['date(1i)'].to_i,
-      params[:worksession]['date(2i)'].to_i,
-      params[:worksession]['date(3i)'].to_i,
-      params[:worksession]['begin_at(4i)'].to_i,
-      params[:worksession]['begin_at(5i)'].to_i).change(:offset => "-08:00")
-      end_time = DateTime::civil(params[:worksession]['date(1i)'].to_i,
-      params[:worksession]['date(2i)'].to_i,
-      params[:worksession]['date(3i)'].to_i,
-      params[:worksession]['end_at(4i)'].to_i,
-      params[:worksession]['end_at(5i)'].to_i).change(:offset => "-08:00")
-      date = DateTime::civil(params[:worksession]['date(1i)'].to_i,
-      params[:worksession]['date(2i)'].to_i,
-      params[:worksession]['date(3i)'].to_i).change(:offset => "-08:00")
+      parsed_date = DateTime.strptime(params[:worksession]["date"], "%m/%d/%Y").advance(:hours => 8)
+      parsed_begin = DateTime.parse(params[:worksession]["begin_at"])
+      parsed_end = DateTime.parse(params[:worksession]["end_at"])
+
+      begin_time = DateTime::civil(parsed_date.year, parsed_date.month, parsed_date.day,
+      parsed_begin.hour,
+      parsed_begin.minute).change(:offset => "-08:00")
+      end_time = DateTime::civil(parsed_date.year, parsed_date.month, parsed_date.day,
+      parsed_end.hour,
+      parsed_end.minute).change(:offset => "-08:00")
+      date = parsed_date
       if !check_possible_time(begin_time, end_time)
         return nil
       end

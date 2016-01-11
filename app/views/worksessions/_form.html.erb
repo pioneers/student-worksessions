@@ -1,9 +1,10 @@
 <%= bootstrap_form_for(@worksession) do |f| %>
+	<%= f.text_field :date, :class => 'datepicker', :style => "width: 150px;"%>
 
-  <%= f.date_select :date %>
-  
-  <%= f.time_select :begin_at %>
-  <%= f.time_select :end_at %>
-  <%= f.text_area :notes, as: :text %>
-  <%= f.button :Submit, class: 'btn btn-default'  %>
+	<%= f.text_field :begin_at, class: 'timepicker', :style => "width: 100px", inline: true %>
+
+	<%= f.text_field :end_at, class: 'timepicker', :style => "width: 100px", inline: true %>
+	<%= f.text_area :notes, as: :text %>
+	<%= f.button :Submit, class: 'btn btn-default'  %>
 <% end %>
+

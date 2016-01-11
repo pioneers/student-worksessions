@@ -12,7 +12,10 @@
  *
  *= require bootstrap-datetimepicker
  *= require rails_bootstrap_forms
+ *= require bootstrap-datepicker3
+
  *= require fullcalendar
+ *= require jquery.timepicker.css
  *= require_tree .
  *= require_self
  */
@@ -74,4 +77,11 @@ thead {
 #signth {
   padding-left: 15px;
 }
+.form-control {
+  
+  width: 40%;
+  }
+
+
+
 

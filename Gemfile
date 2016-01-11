@@ -4,7 +4,14 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.4'
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+group :development, :test do
+  gem 'sqlite3'
+end
+
+group :production do
+  gem 'pg'
+  gem 'rails_12factor'
+end
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -46,7 +53,12 @@ group :development do
   gem 'spring'
 end
 gem 'momentjs-rails', '~> 2.9', :github => 'derekprior/momentjs-rails'
+gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
+gem 'bootstrap-datepicker-rails'
+gem 'bootstrap-timepicker-rails'
+gem 'jquery-timepicker-rails'
 
+gem 'jquery-turbolinks'
 gem 'fullcalendar-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'simple_form'
@@ -54,6 +66,4 @@ gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form'
 gem "twitter-bootstrap-rails", :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
-gem 'bootstrap-datetimepicker-rails'
-
 

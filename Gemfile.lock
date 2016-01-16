@@ -234,6 +234,7 @@ DEPENDENCIES
   jquery-rails
   jquery-timepicker-rails
   jquery-turbolinks
+  jquery-ui-rails
   momentjs-rails (~> 2.9)!
   pg
   rails (= 4.2.4)

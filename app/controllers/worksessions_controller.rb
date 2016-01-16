@@ -96,7 +96,7 @@ class WorksessionsController < ApplicationController
       @worksession.save
       @user.worksessions.delete(@worksession)
       @user.save
-      redirect_to user_worksessions_path(params[:user_id])
+      redirect_to user_worksessions_path(current_user)
     end
   end
 

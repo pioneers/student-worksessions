@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     get :get_events, on: :collection
   end
   post 'worksessions/:id/sign_up' => 'worksessions#sign_up', as: :signup
+  get 'worksessions/:id/sign_up' => 'worksessions#sign_up', as: :signUp
+
 
   get 'worksessions/:id/cancel' => 'worksessions#cancel', as: :cancel
   

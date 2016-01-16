@@ -57,8 +57,9 @@ gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 gem 'bootstrap-datepicker-rails'
 gem 'bootstrap-timepicker-rails'
 gem 'jquery-timepicker-rails'
-
+gem 'jquery-ui-rails'
 gem 'jquery-turbolinks'
+
 gem 'fullcalendar-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'simple_form'

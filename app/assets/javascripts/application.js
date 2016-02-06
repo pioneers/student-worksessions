@@ -55,13 +55,14 @@ $(document).ready(function() {
 
     defaultView: $.cookie('fullcalendar_defaultView') || 'agendaWeek',
     defaultDate: $.cookie('fullcalendar_defaultDay') || null, 
-    slotMinutes: 30,
+    slotMinutes: 60,
     events: "/worksessions/available.json",
     timeFormat: "h:mm a",
     contentHeight: 'auto',
     dragOpacity: "0.5",
-    minTime: "09:00:00",
-    maxTime: "21:00:00",
+    minTime: "10:00:00",
+    maxTime: "20:00:00",
+    firstDay: 1,
     viewRender: function(view) {
      $.cookie('fullcalendar_defaultView', view.name); 
      $.cookie('fullcalendar_defaultDay', view.intervalStart.format()); 
@@ -74,12 +75,10 @@ $(document).ready(function() {
         $("#startTime").html(moment(event.start).format('MMM Do, h:mm A') + "-" + moment(event.end).format('h:mm A'));
         if(event.title == "Available") {
           $("#signUp").html("Sign Up");
-          $("#signUp").attr('href', event.signup_url);
-        } else if (event.title == "Taken") {
-          if (event.user_id == event.current_user_id) {
-            $("#signUp").html("Cancel");
-            $("#signUp").attr('href', event.cancel_url);
-          }
+          $("#signUp").attr('href', event.signup_url);}
+        if (event.title == "Signed Up") {
+          $("#signUp").html("Cancel");
+          $("#signUp").attr('href', event.cancel_url);
         }
 
 

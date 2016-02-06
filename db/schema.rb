@@ -11,7 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160104041413) do
+ActiveRecord::Schema.define(version: 20160206224650) do
+
+  create_table "bookings", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "worksession_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "bookings", ["user_id"], name: "index_bookings_on_user_id"
+  add_index "bookings", ["worksession_id", "user_id"], name: "index_bookings_on_worksession_id_and_user_id", unique: true
+  add_index "bookings", ["worksession_id"], name: "index_bookings_on_worksession_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
@@ -40,8 +51,8 @@ ActiveRecord::Schema.define(version: 20160104041413) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "user_id"
-    t.datetime     "begin_at"
-    t.datetime     "end_at"
+    t.datetime "begin_at"
+    t.datetime "end_at"
     t.boolean  "free"
   end
 

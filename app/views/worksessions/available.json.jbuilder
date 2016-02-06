@@ -8,6 +8,9 @@ json.array!(@worksessions) do |worksession|
   json.user_id worksession.user_id
   if worksession.free
   	json.title "Available"
+  elsif current_user.id == worksession.user_id
+    json.title "Signed Up"
+    json.color '#009900'
   else 
   	json.title "Taken"
   	json.color '#993333'

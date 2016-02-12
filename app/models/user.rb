@@ -3,5 +3,9 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-  has_many :worksessions
+  has_many :bookings
+  has_many :worksessions, :through => :bookings,
+                                  foreign_key: "worksession_id",
+                                  dependent: :destroy
+
 end

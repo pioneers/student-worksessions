@@ -1,4 +1,5 @@
 <p id="notice"><%= notice %></p>
+<h1 class = "center">All Worksessions</h1>
 <div id="eventContent" title="Event Details">
     <div id="eventInfo"></div>
       <span id="startTime"></span><br>
@@ -7,8 +8,12 @@
 
 
 </div>
+
 <div id="calendar"> </div>
-  <h1 class = "center">Available Worksessions</h1>
+  
+<%
+=begin %>
+<h1 class = "center">Available Worksessions</h1>
 <table>
   <thead>
     <tr>
@@ -53,3 +58,6 @@
 <% if current_user.admin %>
   
 <% end %>
+<%
+=end
+%>

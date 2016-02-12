@@ -17,8 +17,8 @@
 		    <%= menu_item "Teams", users_path%>
 		<% else %>
 			<%= menu_group do %>
-				<%= menu_item "Your Worksessions", authenticated_root_path %>
-		    	<%= menu_item "Worksession Sign-Up", available_path%>
+				<%# <%= menu_item "Your Worksessions", authenticated_root_path %> 
+		    	<%= menu_item "All Worksessions", available_path%>
 		    <% end %>
 		<% end %>
 	    <% end %>

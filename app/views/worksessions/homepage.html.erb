@@ -30,7 +30,7 @@
           <td><%= worksession.end_at.in_time_zone.strftime("%I:%M %P")%></td>
           <% if not worksession.free? %>
             <td>Taken</t>
-            <td><%= User.find(worksession.user_id).team_name %> </td>
+
           <% else %>
             <td>Free</t>
             <td>  </td>

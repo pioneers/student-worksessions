@@ -9,6 +9,8 @@ Rails.application.routes.draw do
       root 'devise/sessions#new', as: :unauthenticated_root
     end
   end
+  get 'worksessions/create_2_weeks' => 'worksessions#create_worksessions', as: :create_worksessions
+  
   resources :users do
       resources :worksessions
   end

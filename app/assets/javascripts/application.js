@@ -62,7 +62,6 @@ $(document).ready(function() {
     dragOpacity: "0.5",
     minTime: "10:00:00",
     maxTime: "20:00:00",
-    firstDay: 1,
     viewRender: function(view) {
      $.cookie('fullcalendar_defaultView', view.name); 
      $.cookie('fullcalendar_defaultDay', view.intervalStart.format()); 

@@ -1,19 +1,26 @@
 json.array!(@worksessions) do |worksession|
-  json.extract! worksession, :id
-  json.start worksession.begin_at
-  json.end worksession.end_at
-  json.signup_url signUp_path(worksession)
-  json.cancel_url cancel_path(worksession)
+  if worksession.begin_at >= @today - 1.day
+    json.extract! worksession, :id
+    json.start worksession.begin_at
+    json.end worksession.end_at
+    json.signup_url signUp_path(worksession)
+    json.cancel_url cancel_path(worksession)
 
-  json.user_id worksession.user_id
-  if worksession.free
-  	json.title "Available"
-  elsif current_user.id == worksession.user_id
-    json.title "Signed Up"
-    json.color '#009900'
-  else 
-  	json.title "Taken"
-  	json.color '#993333'
+    json.user_id worksession.user_id
+    
+    if worksession.users.include?(current_user)
+      json.title "Signed Up"
+      json.color '#009900'
+    elsif worksession.past
+      json.title "Unavailable"
+      json.color '#A6A39F'
+
+    elsif worksession.free
+      json.title "Available"
+    else 
+    	json.title "Taken"
+    	json.color '#993333'
+    end
+    json.current_user_id current_user.id
   end
-  json.current_user_id current_user.id
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160206224650) do
+ActiveRecord::Schema.define(version: 20160212002025) do
 
   create_table "bookings", force: :cascade do |t|
     t.integer  "user_id"
@@ -48,12 +48,13 @@ ActiveRecord::Schema.define(version: 20160206224650) do
     t.integer  "created_by"
     t.datetime "date"
     t.text     "notes"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.integer  "user_id"
     t.datetime "begin_at"
     t.datetime "end_at"
     t.boolean  "free"
+    t.boolean  "past",       default: false
   end
 
 end

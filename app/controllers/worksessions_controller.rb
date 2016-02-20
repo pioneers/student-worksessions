@@ -19,7 +19,7 @@ class WorksessionsController < ApplicationController
   def homepage
     @worksessions = Worksession.all
     if not current_user.admin? 
-      redirect_to user_worksessions_path(current_user)
+      redirect_to available_path(current_user)
     end
   end
 
@@ -27,6 +27,7 @@ class WorksessionsController < ApplicationController
   # GET /worksessions/1
   # GET /worksessions/1.json
   def show
+    @user = User.find(params[:id])
   end
 
   # GET /worksessions/new
@@ -42,7 +43,7 @@ class WorksessionsController < ApplicationController
   # POST /worksessions.json
   # Should be used by admin user only
   def create
-    @worksession = divide_worksessions
+    @worksession = parse_worksessions
     respond_to do |format|
       if !@worksession.nil? and @worksession.save
         format.html { redirect_to user_worksessions_path(current_user.id), notice: 'Worksession was successfully created.' }
@@ -79,7 +80,7 @@ class WorksessionsController < ApplicationController
         #create worksession from 10am to 6pm
       end
     end
-    redirect_to available_path
+    redirect_to authenticated_root_path
 
   end
 
@@ -222,9 +223,9 @@ class WorksessionsController < ApplicationController
       parsed_end.hour,
       parsed_end.minute).change(:offset => "-08:00")
       date = parsed_date
-      if !check_possible_time(begin_time, end_time)
-        return nil
-      end
+      # if !check_possible_time(begin_time, end_time)
+      #   return nil
+      # end
     return divide_worksession(begin_time, end_time)
     #   new_start = begin_time.beginning_of_hour()
     #   new_end = new_start.advance(:hours => 1)
@@ -243,7 +244,7 @@ class WorksessionsController < ApplicationController
     # return @worksession
   end
 
-    def divide_worksession(start_time, end_time)
+    def divide_worksession(start_time = nil, end_time = nil)
       new_start = start_time.beginning_of_hour()
       new_end = new_start.advance(:hours => 1)    
       while new_end <= end_time

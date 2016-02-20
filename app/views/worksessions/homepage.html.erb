@@ -1,3 +1,18 @@
+<h1 class = "center">All Worksessions</h1>
+<div id="eventContent" title="Event Details">
+    <span id="startTime"></span><br>
+    <div id="eventInfo"></div>
+
+<p><strong><a id="delete-button" href=""></a>
+<p><strong><a id="team-sign-button" href=""></a>
+
+</div>
+
+<div id="admin_calendar"> </div>
+<%
+=begin
+%>
+
 <p id="notice"><%= notice %></p>            
   <h1 class = "center">Listing Future Worksessions</h1>
 
@@ -70,5 +85,8 @@
 
 
 
+<%
+=end
+%>
 <td> <%= link_to 'New Worksession', new_user_worksession_path(current_user), class: 'btn btn-default btn'%> </td>
 

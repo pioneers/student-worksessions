@@ -4,6 +4,33 @@
   <%= f.error_notification %>
 
   <div class="form-inputs">
+  	<%= f.input :team_name, label: 'School', required: true, autofocus: true, :collection => 
+["Albany High School",
+"Berkeley High School",
+"De Anza Senior High School",
+"LPS-Richmond",
+"Middle College High School",
+"Bishop O'Dowd High School",
+"Hercules High School",
+"El Cerrito High School",
+"Oakland Technical High School",
+"Pinole Valley High School",
+"Ralph J. Bunche High School",
+"Alameda Community Learning Center",
+"Aspire Richmond California College Preparatory Academy",
+"Balboa High School",
+"Encinal High School",
+"Lighthouse Community Charter High School",
+"Oakland School for the Arts",
+"San Lorenzo High School",
+"Nea Community Learning Center",
+"Realm Charter School",
+"Saint Mary's High School",
+"Arroyo High School",
+"Community Day High School",
+"Hayward High School",
+"Miramonte High School",
+"Testing"] %>
     <%= f.input :email, required: true, autofocus: true %>
     <%= f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length) %>
     <%= f.input :password_confirmation, required: true %>

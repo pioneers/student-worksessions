@@ -9,7 +9,7 @@
     </tr>
   </thead>
   <td> Team Name </td>
-        <td> Show </td>
+        <td> Details </td>
         <td> Worksessions </td>
         <td> Edit </td>
         <td> Delete </td>
@@ -18,7 +18,7 @@
       <% if not user.admin? %>
       <tr>
         <td><%= user.team_name %></td>
-        <td><%= link_to 'Show Details', user %></td>
+        <td><%= link_to 'Details', user %></td>
         <td><%= link_to 'Worksessions', user_worksessions_path(user) %></td>
         <td><%= link_to 'Edit', edit_user_path(user.id) %></td>
         <td><%= link_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>

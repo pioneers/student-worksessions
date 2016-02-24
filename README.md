@@ -1,5 +1,7 @@
 == README == 
 
+**Installation**
+
 Running Locally
 
 Make sure Ruby is installed on your system. Fire command prompt and run command

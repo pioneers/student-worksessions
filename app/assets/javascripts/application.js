@@ -112,6 +112,7 @@ $(document).ready(function() {
              title: "Worksession (" + event.title  + ")",
               });
             $("#delete-button").html("Delete")
+            $("#add_team-button").html("Add Team")
             $("#delete-button").on("click", function(evt){  
                 $.ajax({
                     type:'POST',
@@ -127,7 +128,7 @@ $(document).ready(function() {
                             alert("Error " + err.responseText);
                         }
                     });
-                evt.preventDefault();
+                // evt.preventDefault();
                 });
             
         return false

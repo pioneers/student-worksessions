@@ -84,6 +84,21 @@ class WorksessionsController < ApplicationController
 
   end
 
+  def add_team(user, worksession)
+    worksession.users << user
+    if (@worksession.date.wday.between?(1, 6) and @worksession.users.size < 8) or (@worksession.users.size < 4)
+        @worksession.free = true
+        @worksession.save
+    end
+  end
+
+  def remove_team(user, worksession)
+    user.worksessions.delete(worksession)
+    if (@worksession.date.wday.between?(0, 1) and @worksession.users.size < 8) or (@worksession.date.wday.between?(5, 6) and @worksession.users.size < 4)
+        @worksession.free = true
+        @worksession.save
+    end
+  end
 
   def available
      @worksessions = Worksession.all
@@ -103,7 +118,7 @@ class WorksessionsController < ApplicationController
         @worksession.notes = params[:notes]
       end
       @worksession.users << @user
-      if (@worksession.date.wday.between?(1, 6) and @worksession.users.size >= 8) or (@worksession.users.size >= 4)
+      if (@worksession.date.wday.between?(0, 1) and @worksession.users.size >= 8) or (@worksession.date.wday.between?(5, 6) and @worksession.users.size >= 4)
         @worksession.free = false
         @worksession.save
       end
@@ -125,7 +140,7 @@ class WorksessionsController < ApplicationController
       @user.worksessions.delete(@worksession)
       @worksession.users.delete(@user)
       @user.save
-      if (@worksession.date.wday.between?(1, 6) and @worksession.users.size < 8) or (@worksession.users.size < 4)
+      if (@worksession.date.wday.between?(0, 1) and @worksession.users.size < 8) or (@worksession.date.wday.between?(5, 6) and @worksession.users.size < 4)
         @worksession.free = true
         @worksession.save
       end

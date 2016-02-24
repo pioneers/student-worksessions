@@ -4,10 +4,10 @@ Running Locally
 
 Make sure Ruby is installed on your system. Fire command prompt and run command
 
-```ruby
+```
 ruby -v
 ```
-
+	
 Make sure Rails is installed
 rails -v
 
@@ -17,7 +17,9 @@ gem install rails
 Once done, clone the git repository
 
 git clone https://github.com/pioneers/student_worksessions.git
-Go into new app
+
+Go into app directory
+
 cd student_worksessions
 
 Install all dependencies

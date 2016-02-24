@@ -9,8 +9,9 @@ ruby -v
 ```
 	
 Make sure Rails is installed
+```
 rails -v
-
+```
 If you see Ruby and Rails version then you are good to start, other wise setup Ruby On Rails
 
 ```

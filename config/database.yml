@@ -27,5 +27,5 @@ production:
   username: worksession
   password: 5D73FDF75D8D91E4E55
   port: 5000
-  host: pierobotics.org
+  host: 45.55.115.218
 

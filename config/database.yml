@@ -26,4 +26,5 @@ production:
   database: worksession_db
   username: worksession
   password: 5D73FDF75D8D91E4E55
+  port: 5000
 

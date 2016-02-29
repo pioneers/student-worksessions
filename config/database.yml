@@ -26,6 +26,6 @@ production:
   database: worksession_db
   username: worksession
   password: 5D73FDF75D8D91E4E55
-  host: <% ENV['WORKSESSION_PORT_3306_TCP_ADDR'] %>
-  port: <% ENV["WORKSESSION_PORT_3306_TCP_PORT"] %>
+  host: <%= ENV['WORKSESSION_PORT_3306_TCP_ADDR'] %>
+  port: <%= ENV['WORKSESSION_PORT_3306_TCP_PORT'] %>
 

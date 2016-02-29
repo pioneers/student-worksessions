@@ -17,6 +17,7 @@ class UsersController < ApplicationController
   		@user.save
   	end
   	def show
+      
   	end
   	def edit
   	end

@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get '/worksessions/create_2_weeks' => 'worksessions#create_worksessions', as: :create_worksessions
   get '/users/reset_password' => 'users#reset_password', as: :reset_password
   resources :users do
-      resources :worksessions
+    resources :worksessions
   end
   get '/worksessions/available' => 'worksessions#available', as: :available
   resources :worksessions

@@ -10,22 +10,22 @@ Rails.application.routes.draw do
       root 'devise/sessions#new', as: :unauthenticated_root
     end
   end
-  get 'worksessions/create_2_weeks' => 'worksessions#create_worksessions', as: :create_worksessions
-  get 'users/reset_password' => 'users#reset_password', as: :reset_password
+  get '/worksessions/create_2_weeks' => 'worksessions#create_worksessions', as: :create_worksessions
+  get '/users/reset_password' => 'users#reset_password', as: :reset_password
   resources :users do
       resources :worksessions
   end
-  get 'worksessions/available' => 'worksessions#available', as: :available
+  get '/worksessions/available' => 'worksessions#available', as: :available
   resources :worksessions
   
   resources :worksession do
     get :get_events, on: :collection
   end
-  post 'worksessions/:id/sign_up' => 'worksessions#sign_up', as: :signup
-  get 'worksessions/:id/sign_up' => 'worksessions#sign_up', as: :signUp
+  post '/worksessions/:id/sign_up' => 'worksessions#sign_up', as: :signup
+  get '/worksessions/:id/sign_up' => 'worksessions#sign_up', as: :signUp
 
 
-  get 'worksessions/:id/cancel' => 'worksessions#cancel', as: :cancel
+  get '/worksessions/:id/cancel' => 'worksessions#cancel', as: :cancel
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -5,12 +5,13 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: mysql2
+
   encoding: utf8
   pool: 5
   timeout: 5000
 
 development:
+  adapter: sqlite3
   <<: *default
   database: db/development.mysql
 
@@ -18,11 +19,16 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
+  adapter: mysql2
   <<: *default
-  database: db/test.mysql
+  host: localhost
+  socket: /tmp/mysql.sock
+  password: kiekocloud
+  database: test_database
 
 production:
   <<: *default
+  adapter: mysql2
   database: worksession_db
   username: worksession
   password: 5D73FDF75D8D91E4E55

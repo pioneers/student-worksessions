@@ -1,8 +1,11 @@
 
-
-
+<% if @team_user.nil? %>
+	<p> All Worksessions </p>
+<%else %>
+	<h1><%= @team_user.team_name%>  's Worksessions  </h1>
+<% end %>
 <%= form_tag(worksessions_view_path, :method => :post) do %>
-	<%= select_tag( :team_name, options_from_collection_for_select(@users, 'id', 'team_name'),
+	<%= select_tag( :team_name, options_from_collection_for_select(@users, 'team_name', 'id'),
 		:class => 'genForm_dropBox',onchange: "this.form.submit();") %>
 <div id="view_calendar"> </div>
 

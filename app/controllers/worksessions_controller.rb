@@ -31,14 +31,25 @@ class WorksessionsController < ApplicationController
   end
 
   def view
-    @users = User.all
-    if (params.has_key?(:team_name)) 
-      @team_user = User.find_by team_name: params[:team_name]
+    logger.debug "params: #{params.inspect}"
+    if (params.has_key?(:id)) 
+    #   @team_user = User.find_by team_name: params[:team_name]
+    # else
+      @team_user = User.find(params[:id])
     else
-      @team_user = User.all
+      @team_user = nil
+    end
+    # @team_user = User.find_by team_name: params[:team_name]
+    logger.debug "team_user: #{@team_user.inspect}"
+    @users = User.all
+    # @team_user = User.find(params[:team_name])
+    # if (params.has_key?(:team_name)) 
+    #   @team_user = User.find_by team_name: params[:team_name]
+    # else
+    #   @team_user = nil
     #   @users = Array(User.find_by team_name: params[:team_name])
     # end
-  end
+    # end
   end
   # GET /worksessions/new
   def new

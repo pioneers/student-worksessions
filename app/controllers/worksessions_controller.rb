@@ -1,5 +1,5 @@
 class WorksessionsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:view]
   before_action :set_worksession, :set_user, only: [:show, :edit, :update, :destroy, :sign_up, :cancel]
   before_action :set_today
   respond_to :json
@@ -30,6 +30,16 @@ class WorksessionsController < ApplicationController
     @user = User.find(params[:id])
   end
 
+  def view
+    @users = User.all
+    if (params.has_key?(:team_name)) 
+      @team_user = User.find_by team_name: params[:team_name]
+    else
+      @team_user = User.all
+    #   @users = Array(User.find_by team_name: params[:team_name])
+    # end
+  end
+  end
   # GET /worksessions/new
   def new
     @worksession = Worksession.new

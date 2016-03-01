@@ -178,5 +178,39 @@ $(document).ready(function() {
     
 
   });
+  $("#view_calendar").fullCalendar({
+    header: {
+                 left: "prev,next today",
+                 center: "title",
+                 right: 'month,agendaWeek,agendaDay'
+             },
+
+    defaultView: $.cookie('fullcalendar_defaultView2') || 'agendaWeek',
+    defaultDate: $.cookie('fullcalendar_defaultDay2') || null, 
+    slotMinutes: 30,
+    contentHeight: 'auto',
+    events: "/worksessions/view.json",
+    timeFormat: "h:mm a",
+    dragOpacity: "0.5",
+    displayEventTime: true,
+    minTime: "09:00:00",
+    maxTime: "21:00:00",
+    viewRender: function(view) {
+     $.cookie('fullcalendar_defaultView2', view.name); 
+     $.cookie('fullcalendar_defaultDay2', view.intervalStart.format()); 
+
+   },
+
+    eventClick:  function(event, jsEvent, view) {
+        //set the values and open the modal
+        $("#eventInfo").html(event.description);
+        $("#startTime").html(moment(event.start).format('MMM Do, h:mm A') + "-" + moment(event.end).format('h:mm A')); 
+        $("#eventContent").dialog({ modal: true, title: "Worksession"});
+        return false
+    },
+
+    
+
+  });
 });
 

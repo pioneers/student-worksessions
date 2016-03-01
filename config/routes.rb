@@ -10,6 +10,9 @@ Rails.application.routes.draw do
       root 'devise/sessions#new', as: :unauthenticated_root
     end
   end
+  match "worksessions/view" => "worksessions#view", as: :worksessions_view, via: [:get, :post]
+  # resources 'worksessions/view' => 'worksessions#view', as: :views
+  # post 'worksessions/view' => 'worksessions#view', as: :views
   get '/worksessions/create_2_weeks' => 'worksessions#create_worksessions', as: :create_worksessions
   get '/users/reset_password' => 'users#reset_password', as: :reset_password
   resources :users do
@@ -18,6 +21,7 @@ Rails.application.routes.draw do
   get '/worksessions/available' => 'worksessions#available', as: :available
   resources :worksessions
   
+
   resources :worksession do
     get :get_events, on: :collection
   end

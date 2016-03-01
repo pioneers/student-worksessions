@@ -1,0 +1,9 @@
+
+
+
+<%= form_tag(worksessions_view_path, :method => :post) do %>
+	<%= select_tag( :team_name, options_from_collection_for_select(@users, 'id', 'team_name'),
+		:class => 'genForm_dropBox',onchange: "this.form.submit();") %>
+<div id="view_calendar"> </div>
+
+<% end %>

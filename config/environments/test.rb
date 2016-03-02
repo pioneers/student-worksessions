@@ -20,10 +20,10 @@ Rails.application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
-  config.action_mailer.default_url_options = { :host => 'www.worksessions.pierobotics.org', 
+  config.action_mailer.default_url_options = { :host => 'worksessions.pierobotics.org', 
                                                 :protocol => 'https' }
 
-  Rails.application.routes.default_url_options[:host] = 'www.worksessions.pierobotics.org'
+  Rails.application.routes.default_url_options[:host] = 'worksessions.pierobotics.org'
   Rails.application.routes.default_url_options[:protocol] = 'https'
 
   # Raise exceptions instead of rendering exception templates.

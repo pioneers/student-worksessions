@@ -12,7 +12,7 @@
 	<%= menu_group do %>
 		<%= render 'devise/menu/login_items' %>
 		<%= render 'devise/menu/registration_items' %>
-		<%# <%= menu_item "View All Worksessions", worksessions_view_path %>
+		 <%# <%= menu_item "View All Worksessions", worksessions_view_path %>
 		<% if user_signed_in? %>
 			<% if current_user.admin? %>
 			    <%= menu_item "All Worksessions", authenticated_root_path %>

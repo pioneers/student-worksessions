@@ -65,46 +65,22 @@ $(document).ready(function() {
 
         eventClick:  function(event, jsEvent, view) {
             //set the values and open the modal
-            $("#cancel").remove()
-            $("#signUp").remove()
+            $("#eventInfo").html(event.description);
             $("#startTime").html(moment(event.start).format('MMM Do, h:mm A') + "-" + moment(event.end).format('h:mm A'));
-            $("#eventInfo").html(event.description); 
-            if (event.notes != null) {
-                $("#eventNotes").html(event.notes); 
-              }
-            else {
-              $("#eventNotes").empty(); 
-            }
             if(event.title == "Available") {
-                var signup_div= $('<p><strong><button id="signUp">Sign Up</button> </strong>');
-                $("#eventContent").append(signup_div)
-                $("#signUp").on('click', function(){
-                    $("#txtbox").html("<strong>(Optional)</strong> Any specific debugging/problems you want help with? Or specific materials you want for worksessions?");
-                    var signUpUrl = '<form action =' + event.signup_url.toString() + ' >'
-
-                    var textArea = $(signUpUrl + ' <textarea type= "text" name = "notes" placeholder= "e.g. We need help debugging code/are having grizzly problems." style = "width: 320px; height: 100px; font-size: 12px;" /> <input type="submit"/> <input type="submit" value = "Nope, we\'re good!"/>'); 
-                    $("#txtbox").append(textArea);
-                    // $("#notes").html("<input id='notes' type='text'  placeholder='e.g. Debugging Runtime, grizzly problems' style = 'width:320px; height:180px; padding-top: 1px;'>");
-                    $("#eventContent").dialog('close');
-                    $("#Notes").dialog({ modal: true, title: "Additional Notes",resizable: true, width:400, height: 270});
-                    $("#Submit").html('Submit');
-                    $("#Submit").addClass('btn btn-default');
-                    $("#Submit").attr('href', event.signup_url);
-                    });
-            };
-
+                $("#signUp").html("Sign Up");
+                $("#signUp").attr('href', event.signup_url);}
             if (event.title == "Signed Up") {
-                var cancel_div= $('<p><strong><a id="cancel" class="widget button">Cancel</a> </strong>');
-                $("#eventContent").append(cancel_div)
-                $("#cancel").attr('href', event.cancel_url);
+                $("#signUp").html("Cancel");
+                $("#signUp").attr('href', event.cancel_url);
             }
         $("#eventContent").dialog({ modal: true, title: "Worksession (" + event.title  + ")"});
         return false
+    },
 
     
 
-  }
-});
+  });
     $("#admin_calendar").fullCalendar({
         header: {
                      left: "prev,next today",
@@ -129,17 +105,14 @@ $(document).ready(function() {
 
         eventClick:  function(event, jsEvent, view) {
             //set the values and open the modal
-            $("#Notes-Button").remove()
             $("#startTime").html(moment(event.start).format('MMM Do, h:mm A') + "-" + moment(event.end).format('h:mm A'));
             $("#eventInfo").html(event.team_names);
             $("#eventContent").dialog({
              modal: true, 
              title: "Worksession (" + event.title  + ")",
               });
-            $("#eventContent").append("<p><strong><button id='Notes-Button'>All Notes</button>")
-             
             $("#delete-button").html("Delete")
-            // $("#add_team-button").html("Add Team")
+            $("#add_team-button").html("Add Team")
             $("#delete-button").on("click", function(evt){  
                 $.ajax({
                     type:'POST',
@@ -157,27 +130,6 @@ $(document).ready(function() {
                     });
                 // evt.preventDefault();
                 });
-            $("#Notes-Button").on("click", function(){  
-
-                $("#All-Notes").dialog({
-                     modal: true, 
-                     title: "All Notes for this Worksession",
-                  });
-                $("#All-Notes").html('');
-                var team_notes = event.team_notes
-                for (var team_name in team_notes) {
-                  var notes = team_notes[team_name]
-                  if (notes != null && /\S/.test(notes)) {
-                    var team_div = '<p><strong><div>' + team_name + ' </div></strong>'
-                    var Notes= '<div>' + notes + '</div></p>'; 
-                    $("#All-Notes").append(team_div);
-                    $("#All-Notes").append(Notes);
-                  }
-                }
-                  
-
-                });
-
             
         return false
     },

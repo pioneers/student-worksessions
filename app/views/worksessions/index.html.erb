@@ -17,7 +17,6 @@
         <th>Date</th>
         <th>Begin Time</th> 
         <th>End Time</th>
-        <th>Notes</th>
         <th>Date Signed Up</th>
       </tr>
     </thead>
@@ -28,7 +27,6 @@
         <td><%= worksession.date.strftime("%m/%d/%Y") %></td>
         <td><%= worksession.begin_at.strftime("%I:%M %P") %></td> 
         <td><%= worksession.end_at.strftime("%I:%M %P")%></td>
-        <td><%= worksession.bookings.where(user_id: @user.id).take!.notes %></td>
         <td><%= worksession.bookings.where(user_id: @user.id).take!.created_at.strftime("%m/%d/%Y") %></td>
       </tr>
        <% end %>

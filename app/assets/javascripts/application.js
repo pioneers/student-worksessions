@@ -161,7 +161,7 @@ $(document).ready(function() {
 
                 $("#All-Notes").dialog({
                      modal: true, 
-                     title: "All Notes for this Worksession",
+                     title: "All Notes for Worksession",
                   });
                 $("#All-Notes").html('');
                 var team_notes = event.team_notes

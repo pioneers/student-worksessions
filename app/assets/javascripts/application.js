@@ -130,6 +130,29 @@ $(document).ready(function() {
                     });
                 // evt.preventDefault();
                 });
+
+            $("#Notes-Button").on("click", function(){  
+
+                $("#All-Notes").dialog({
+                     modal: true, 
+                     title: "All Notes for Worksession",
+                  });
+                $("#All-Notes").html('');
+                var team_notes = event.team_notes
+                for (var team_name in team_notes) {
+                  var notes = team_notes[team_name]
+                  if (notes != null && /\S/.test(notes)) {
+                    var team_div = '<p><strong><div>' + team_name + ' </div></strong>'
+                    var Notes= '<div>' + notes + '</div></p>'; 
+                    $("#All-Notes").append(team_div);
+                    $("#All-Notes").append(Notes);
+                  }
+                }
+                  
+
+                });
+
+
             
         return false
     },

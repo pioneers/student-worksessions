@@ -30,6 +30,7 @@ Rails.application.routes.draw do
 
 
   get '/worksessions/:id/cancel' => 'worksessions#cancel', as: :cancel
+  get '/worksessions/:worksession_id/:user_id/add_team' => 'worksessions#add_team', as: :add_team
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

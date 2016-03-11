@@ -18,6 +18,7 @@ class WorksessionsController < ApplicationController
 
   def homepage
     @worksessions = Worksession.all
+    @users = User.all
     if not current_user.admin? 
       redirect_to available_path(current_user)
     end
@@ -103,12 +104,15 @@ class WorksessionsController < ApplicationController
 
   end
 
-  def add_team(user, worksession)
+  def add_team
+    user = User.find(params[:user_id])
+    worksession = Worksession.find(params[:worksession_id])
     worksession.users << user
-    if (@worksession.date.wday.between?(1, 6) and @worksession.users.size < 8) or (@worksession.users.size < 4)
-        @worksession.free = true
-        @worksession.save
+    if (worksession.date.wday.between?(1, 6) and worksession.users.size < 8) or (worksession.users.size < 4)
+        worksession.free = true
+        worksession.save
     end
+    redirect_to authenticated_root_path
   end
 
   def remove_team(user, worksession)
@@ -117,6 +121,7 @@ class WorksessionsController < ApplicationController
         @worksession.free = true
         @worksession.save
     end
+    redirect_to authenticated_root_path
   end
 
   def available

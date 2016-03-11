@@ -141,7 +141,8 @@ class WorksessionsController < ApplicationController
       if !params[:notes].nil?
         @worksession.notes = params[:notes]
       end
-      @worksession.users << @user
+      booking = Booking.create(user_id: @user.id, worksession_id: @worksession.id, notes: params[:notes])
+      # @worksession.users << @user
       if (@worksession.date.wday.between?(0, 1) and @worksession.users.size >= 8) or (@worksession.date.wday.between?(5, 6) and @worksession.users.size >= 4)
         @worksession.free = false
         @worksession.save

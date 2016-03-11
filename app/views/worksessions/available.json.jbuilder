@@ -9,7 +9,9 @@ json.array!(@worksessions) do |worksession|
     json.user_id worksession.user_id
     
     if worksession.users.include?(current_user)
+      note = Booking.where(worksession_id: worksession.id, user_id: current_user.id).take.notes
       json.title "Signed Up"
+      json.notes note
       json.color '#009900'
     elsif worksession.past
       json.title "Unavailable"

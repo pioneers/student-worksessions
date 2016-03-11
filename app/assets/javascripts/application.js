@@ -105,14 +105,24 @@ $(document).ready(function() {
 
         eventClick:  function(event, jsEvent, view) {
             //set the values and open the modal
+
+            
+            $("#Notes-Button").remove();
+            $("#add_team-button").empty();
+            $("#All-Teams").empty();
+
             $("#startTime").html(moment(event.start).format('MMM Do, h:mm A') + "-" + moment(event.end).format('h:mm A'));
             $("#eventInfo").html(event.team_names);
             $("#eventContent").dialog({
              modal: true, 
              title: "Worksession (" + event.title  + ")",
               });
-            $("#delete-button").html("Delete")
-            $("#add_team-button").html("Add Team")
+            $("#eventContent").append("<p><strong><a id='add_team-button' href=''></a> </strong></p>");
+            $("#eventContent").append("<p><strong><button id='Notes-Button'>All Notes</button>");
+            $("#add_team-button").html("Add Team");
+            $("#delete-button").html("Delete");
+            // $("#add_team-button").html("Add Team")
+
             $("#delete-button").on("click", function(evt){  
                 $.ajax({
                     type:'POST',
@@ -122,7 +132,7 @@ $(document).ready(function() {
                     success:function(){
                       //I assume you want to do something on controller action execution success?
                       $( "#eventContent" ).dialog( "close" );
-                            alert("Deleted successfully")
+                            alert("Deleted successfully");
                         },
                      error: function (err, data) {
                             alert("Error " + err.responseText);
@@ -130,8 +140,46 @@ $(document).ready(function() {
                     });
                 // evt.preventDefault();
                 });
+
             
-        return false
+            $("#add_team-button").on("click", function(evt){  
+              $("#All-Teams").dialog({
+                     modal: true, 
+                     title: "All Teams",
+                  });
+              $("#All-Teams").html('');
+                var users = $("#all_users").data("users");
+                for (var i = 0; i < users.length; i++) {
+                  var user = users[i];
+                  var url = '/worksessions/' + event.id +'/' + user['id'] + '/add_team';
+                  var team_name = '<p><strong><a href=' + url + '>' + user['team_name'] + ' </a></strong>';
+                  $("#All-Teams").append(team_name);
+                }
+                evt.preventDefault();
+                });
+            $("#Notes-Button").on("click", function(){  
+
+                $("#All-Notes").dialog({
+                     modal: true, 
+                     title: "All Notes for this Worksession",
+                  });
+                $("#All-Notes").html('');
+                var team_notes = event.team_notes;
+                for (var team_name in team_notes) {
+                  var notes = team_notes[team_name]
+                  if (notes != null && /\S/.test(notes)) {
+                    var team_div = '<p><strong><div>' + team_name + ' </div></strong>';
+                    var Notes= '<div>' + notes + '</div></p>'; 
+                    $("#All-Notes").append(team_div);
+                    $("#All-Notes").append(Notes);
+                  }
+                }
+                  
+
+                });
+
+            
+        return false;
     },
 
     

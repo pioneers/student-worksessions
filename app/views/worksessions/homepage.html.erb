@@ -2,11 +2,21 @@
 <div id="eventContent" title="Event Details">
     <span id="startTime"></span><br>
     <div id="eventInfo"></div>
-<p><strong><a id="add_team-button" href=""></a>
-<p><strong><a id="delete-button" href=""></a>
-<p><strong><a id="team-sign-button" href=""></a>
+
+
+<%= content_tag :div, id: "all_users", data: {users: @users.to_json} do %>
+<% end %>
+
+
+
+  <p><strong><a id="delete-button" href=""></a>  </strong></p>
+
+  <p><strong><a id="team-sign-button" href=""></a>  </strong></p>
 
 </div>
+
+<div id="All-Teams" title="Teams"> </div>
+<div id="All-Notes" title="All Notes"> </div>
 
 <div id="admin_calendar"> </div>
 <%

@@ -1,4 +1,5 @@
-== README == 
+It is hosted on at worksessions.pioneers.berkeley.edu.
+This is a ruby on rails web app that allows for worksession scheduling between teams and PiE staff. Teams can sign up to come to a certain worksession using the calendar UI.
 
 **Installation**
 

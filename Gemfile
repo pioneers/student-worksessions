@@ -61,7 +61,7 @@ gem 'bootstrap-timepicker-rails'
 gem 'jquery-timepicker-rails'
 gem 'jquery-ui-rails'
 gem 'jquery-turbolinks'
-
+gem "omniauth-google-oauth2", "~> 0.2.1"
 gem 'fullcalendar-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'simple_form'

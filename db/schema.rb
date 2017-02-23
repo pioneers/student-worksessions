@@ -11,19 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160922074331) do
-
-  create_table "bookings", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "worksession_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.text     "notes"
-  end
-
-  add_index "bookings", ["user_id"], name: "index_bookings_on_user_id"
-  add_index "bookings", ["worksession_id", "user_id"], name: "index_bookings_on_worksession_id_and_user_id", unique: true
-  add_index "bookings", ["worksession_id"], name: "index_bookings_on_worksession_id"
+ActiveRecord::Schema.define(version: 20160104041413) do
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
@@ -40,11 +28,6 @@ ActiveRecord::Schema.define(version: 20160922074331) do
     t.datetime "updated_at",                             null: false
     t.string   "team_name"
     t.boolean  "admin",                  default: false
-    t.string   "provider"
-    t.string   "uid"
-    t.string   "name"
-    t.string   "oauth_token"
-    t.datetime "oauth_expires_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
@@ -54,13 +37,12 @@ ActiveRecord::Schema.define(version: 20160922074331) do
     t.integer  "created_by"
     t.datetime "date"
     t.text     "notes"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer  "user_id"
     t.datetime "begin_at"
     t.datetime "end_at"
     t.boolean  "free"
-    t.boolean  "past",       default: false
   end
 
 end

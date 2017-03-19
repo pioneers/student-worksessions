@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { sessions: "users/sessions",registrations: 'registrations'  }
-
   devise_scope :user do
     authenticated :user do
       root 'worksessions#homepage', as: :authenticated_root
@@ -10,6 +9,7 @@ Rails.application.routes.draw do
       root 'devise/sessions#new', as: :unauthenticated_root
     end
   end
+
   match "worksessions/view" => "worksessions#view", as: :worksessions_view, via: [:get, :post]
   # resources 'worksessions/view' => 'worksessions#view', as: :views
   # post 'worksessions/view' => 'worksessions#view', as: :views
@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   end
   get '/worksessions/available' => 'worksessions#available', as: :available
   resources :worksessions
-  
+
 
   resources :worksession do
     get :get_events, on: :collection
@@ -31,7 +31,10 @@ Rails.application.routes.draw do
 
   get '/worksessions/:id/cancel' => 'worksessions#cancel', as: :cancel
   get '/worksessions/:worksession_id/:user_id/add_team' => 'worksessions#add_team', as: :add_team
-  
+
+  get 'tomorrow_status' => 'worksessions#tomorrow_status'
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

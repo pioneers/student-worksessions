@@ -1,5 +1,5 @@
 class WorksessionsController < ApplicationController
-  before_action :authenticate_user!, except: [:view]
+  before_action :authenticate_user!, except: [:view, :tomorrow_status]
   before_action :set_worksession, :set_user, only: [:show, :edit, :update, :destroy, :sign_up, :cancel]
   before_action :set_today
   respond_to :json
@@ -13,13 +13,18 @@ class WorksessionsController < ApplicationController
     else
       @user = User.find(params[:user_id])
     end
-    
+
+  end
+
+  def tomorrow_status
+    @worksessions = Worksession.all
+    @users = User.all
   end
 
   def homepage
     @worksessions = Worksession.all
     @users = User.all
-    if not current_user.admin? 
+    if not current_user.admin?
       redirect_to available_path(current_user)
     end
   end
@@ -32,7 +37,7 @@ class WorksessionsController < ApplicationController
   end
 
   def view
-    if (params.has_key?(:id)) 
+    if (params.has_key?(:id))
     #   @team_user = User.find_by team_name: params[:team_name]
     # else
       @user = User.find(params[:id])
@@ -42,7 +47,7 @@ class WorksessionsController < ApplicationController
     logger.debug "user: #{@user.inspect}"
     @users = User.all
     # @team_user = User.find(params[:team_name])
-    # if (params.has_key?(:team_name)) 
+    # if (params.has_key?(:team_name))
     #   @team_user = User.find_by team_name: params[:team_name]
     # else
     #   @team_user = nil
@@ -89,13 +94,13 @@ class WorksessionsController < ApplicationController
     #but dont want to recreate worksessions every time, only if they dont exist
     two_weeks.each do |date|
       if [1,2,4,5].include?(date.wday)
-        start_time = date.change({ hour: 16 }) 
-        end_time = date.change({ hour: 20 }) 
+        start_time = date.change({ hour: 16 })
+        end_time = date.change({ hour: 20 })
         divide_worksession(start_time, end_time)
         #create worksession from 4pm to 8pm
       elsif [6,0].include?(date.wday)
-        start_time = date.change({ hour: 10 }) 
-        end_time = date.change({ hour: 18 }) 
+        start_time = date.change({ hour: 10 })
+        end_time = date.change({ hour: 18 })
         divide_worksession(start_time, end_time)
         #create worksession from 10am to 6pm
       end
@@ -132,12 +137,12 @@ class WorksessionsController < ApplicationController
   def sign_up
     if @worksession.free == false
       respond_to do |format|
-        format.html { 
+        format.html {
           flash[:notice] = 'Worksession is unavailable. Please choose another'
           redirect_to available_path
         }
       end
-    else 
+    else
       if !params[:notes].nil?
         @worksession.notes = params[:notes]
       end
@@ -149,19 +154,19 @@ class WorksessionsController < ApplicationController
       end
       redirect_to available_path
     end
-    
+
   end
 
   # Usually by a team user
   def cancel
     if !current_user.worksessions.include?(@worksession)
     respond_to do |format|
-      format.html { 
+      format.html {
         redirect_to user_worksessions_path(params[:user_id]), notice: 'You cannot cancel a worksession you are not signed up for.'
       }
       format.json { render :show, status: :created, location: @worksession }
       end
-    else 
+    else
       @user.worksessions.delete(@worksession)
       @worksession.users.delete(@user)
       @user.save
@@ -174,7 +179,7 @@ class WorksessionsController < ApplicationController
     end
   end
 
-  
+
 
 
   # PATCH/PUT /worksessions/1
@@ -269,8 +274,8 @@ class WorksessionsController < ApplicationController
     return divide_worksession(begin_time, end_time)
     #   new_start = begin_time.beginning_of_hour()
     #   new_end = new_start.advance(:hours => 1)
-    
-        
+
+
     # while new_end <= end_time
     #   @worksession = Worksession.create(date: date, begin_at: new_start, end_at: new_end)
     #   @worksession.notes = params[:worksession]["notes"]
@@ -279,14 +284,14 @@ class WorksessionsController < ApplicationController
     #   @worksession.save
     #   new_start = new_end.in_time_zone
     #   new_end = new_start.advance(:hours => 1)
-    
+
     # end
     # return @worksession
   end
 
     def divide_worksession(start_time = nil, end_time = nil)
       new_start = start_time.beginning_of_hour()
-      new_end = new_start.advance(:hours => 1)    
+      new_end = new_start.advance(:hours => 1)
       while new_end <= end_time
         @worksession = Worksession.create(date: new_start, begin_at: new_start, end_at: new_end)
         @worksession.free = true

@@ -4,7 +4,7 @@ ruby "2.3.3"
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5.2'
+gem 'rails', '~>5'
 # Use sqlite3 as the database for Active Record
 group :development do
   gem 'sqlite3'
@@ -70,5 +70,5 @@ gem 'simple_form'
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form'
-gem "twitter-bootstrap-rails", :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+gem "twitter-bootstrap-rails", github: 'seyhunak/twitter-bootstrap-rails'
 gem 'pg'

@@ -1,6 +1,12 @@
+
 echo "Note:This script should be run from student_worksessions/, not student_worksessions/docker/\n";
 
-docker run -it --rm -p 3000:3000 -v "$PWD:/usr/src/app" numascott/pie-student-worksessions:dev /bin/bash 
+if [[ "$OSTYPE" == "msys"* ]]; then
+	echo "Running for Git Bash on Windows"
+   winpty docker run -it --rm -p 3000:3000 -v "$PWD:/usr/src/app" numascott/pie-student-worksessions:dev bash
+else
+   docker run -it --rm -p 3000:3000 -v "$PWD:/usr/src/app" numascott/pie-student-worksessions:dev bash
+fi
 
 # Run a Docker image
 # docker run
@@ -15,7 +21,7 @@ docker run -it --rm -p 3000:3000 -v "$PWD:/usr/src/app" numascott/pie-student-wo
 # -p 3000:3000 
 
 # Map /usr/src/app in the container to the files in our present working directory
-# -v "$PWD:/usr/src/app" 
+# -v "$C:\Users\Jehan\Documents\PiE\Infrastructure\student_worksessions\usr\src\app" 
 
 # Run this Docker image
 # numascott/pie-student-worksessions:dev 

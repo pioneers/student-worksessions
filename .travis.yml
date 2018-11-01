@@ -9,7 +9,7 @@ script:
   - ./docker/build.sh
   - docker run --name web-server -d -p 3000:3000 -v "$PWD:/usr/src/app" numascott/pie-student-worksessions:dev bash -c "bundle exec rails s"
   - sleep 5
-  - curl localhost:3000
+  - curl --fail localhost:3000
   - docker stop web-server
 
 after_script:

@@ -3,15 +3,13 @@ sudo: required
 services:
   - docker
 
-language: ruby
-rvm:
-  - 2.3.3
+language: minimal
 
 script:
   - ./docker/build.sh
   - docker run --name web-server -d -p 3000:3000 -v "$PWD:/usr/src/app" numascott/pie-student-worksessions:dev bash -c "bundle exec rails s"
   - curl localhost:3000
-  - docker stop server
+  - docker stop web-server
 
 after_script:
   - docker images

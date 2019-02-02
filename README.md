@@ -1,4 +1,4 @@
-It is hosted on at worksessions.pioneers.berkeley.edu.
+It is hosted on at [worksessions.pierobotics.org]
 This is a ruby on rails web app that allows for worksession scheduling between teams and PiE staff. Teams can sign up to come to a certain worksession using the calendar UI.
 
 **Installation**
@@ -43,4 +43,13 @@ Now run your application
 rails s
 ```
 It should be hosted on localhost:3000 on your local machine
+
+
+## Notes for Deploying to Production
+
+The website is hosted at [worksessions.pierobotics.org]
+
+General pie deployment notes can be found in the [website wiki](https://github.com/pioneers/website/wiki/Deploying-the-website). Our server is apple.pierobotics.org. 
+
+[Dokku documentation for deploying](https://github.com/dokku/dokku/blob/master/docs/deployment/application-deployment.md). 
 

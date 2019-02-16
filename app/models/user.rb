@@ -1,3 +1,7 @@
+# User is the representative of a robotics team.
+#
+# A user will create a booking for a worksession their
+# team will attend. 
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

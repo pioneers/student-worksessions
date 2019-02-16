@@ -1,3 +1,5 @@
+# Booking records that a user has 
+# reserved a specific worksession.
 class Booking < ActiveRecord::Base
 	belongs_to :user
  	belongs_to :worksession

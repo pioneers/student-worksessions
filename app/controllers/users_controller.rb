@@ -5,31 +5,36 @@ class UsersController < ApplicationController
 		if not current_user.admin? 
 			redirect_to authenticated_root_path
 		end
-    	@users = User.all
-  	end
-    def reset_password
-      render "users/passwords/new"
-    end
-  	def new
-  		@user = User.new
-  	end
-  	def create
-  		@user.save
-  	end
-  	def show
-      
-  	end
-    def destroy
-      @user = User.find(params[:id])
-      if @user.destroy
-          redirect_to users_path, notice: "User deleted."
-      end
-    end
-  	def edit
-  	end
-  	private 
-  	def set_user
-      @user = User.find(params[:id])
-    end
+    @users = User.all
+  end
+    
+  def reset_password
+    render "users/passwords/new"
+  end
 
+  def new
+    @user = User.new
+  end
+
+  def create
+    @user.save
+  end
+
+  def show
+  end
+
+  def destroy
+    @user = User.find(params[:id])
+    if @user.destroy
+        redirect_to users_path, notice: "User deleted."
+    end
+  end
+
+  def edit
+  end
+
+  private 
+  def set_user
+    @user = User.find(params[:id])
+  end
 end

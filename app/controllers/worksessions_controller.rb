@@ -1,3 +1,5 @@
+require 'net/http'
+
 class WorksessionsController < ApplicationController
   before_action :authenticate_user!, except: [:view, :tomorrow_status]
   before_action :set_worksession, :set_user, only: [:show, :edit, :update, :destroy, :sign_up, :cancel]
@@ -147,6 +149,10 @@ class WorksessionsController < ApplicationController
         @worksession.notes = params[:notes]
       end
       booking = Booking.create(user_id: @user.id, worksession_id: @worksession.id, notes: params[:notes])
+
+      url = URI.parse('https://www.ocf.berkeley.edu/~tranjulie/wsflask/slack/')
+      Net::HTTP.post_form(url, {})
+
       # @worksession.users << @user
       if (@worksession.date.wday.between?(0, 1) and @worksession.users.size >= 8) or (@worksession.date.wday.between?(5, 6) and @worksession.users.size >= 4)
         @worksession.free = false

@@ -151,7 +151,13 @@ class WorksessionsController < ApplicationController
       booking = Booking.create(user_id: @user.id, worksession_id: @worksession.id, notes: params[:notes])
 
       url = URI.parse('https://www.ocf.berkeley.edu/~tranjulie/wsflask/slack/')
-      Net::HTTP.post_form(url, {})
+      Net::HTTP.post_form(url, {
+        'notes' => booking.notes,
+        'date' => @worksession.date.strftime("%m/%d/%Y"),
+        'start_time' => @worksession.begin_at.strftime("%I:%M %P"),
+        'end_time' => @worksession.end_at.strftime("%I:%M %P"),
+        'school' => @user.team_name,
+      })
 
       # @worksession.users << @user
       if (@worksession.date.wday.between?(0, 1) and @worksession.users.size >= 8) or (@worksession.date.wday.between?(5, 6) and @worksession.users.size >= 4)

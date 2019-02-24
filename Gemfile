@@ -67,7 +67,7 @@ gem 'jquery-turbolinks'
 gem 'fullcalendar-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'simple_form'
-gem 'bootstrap-sass', '~> 3.2.0'
+gem 'bootstrap-sass', '>= 3.4.1'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form'
 gem "twitter-bootstrap-rails", :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'

@@ -1,12 +1,12 @@
 GIT
-  remote: https://github.com/derekprior/momentjs-rails.git
+  remote: git://github.com/derekprior/momentjs-rails.git
   revision: e2b2dd166b121ded02cdcc54f49fa1f0146c7094
   specs:
     momentjs-rails (2.20.1)
       railties (>= 3.1)
 
 GIT
-  remote: https://github.com/seyhunak/twitter-bootstrap-rails.git
+  remote: git://github.com/seyhunak/twitter-bootstrap-rails.git
   revision: 98e3c2aabfbecd0bb2baa1faf979828fb1011f3e
   specs:
     twitter-bootstrap-rails (4.0.0)
@@ -16,7 +16,7 @@ GIT
       railties (~> 5.0, >= 5.0.1)
 
 GIT
-  remote: https://github.com/zpaulovics/datetimepicker-rails.git
+  remote: git://github.com/zpaulovics/datetimepicker-rails.git
   revision: 36d21cec5da7f5b214925804f60e63c61c747023
   branch: master
   submodules: true

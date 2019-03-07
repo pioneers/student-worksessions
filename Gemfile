@@ -56,7 +56,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
-gem 'momentjs-rails', '~> 2.9', :github => 'derekprior/momentjs-rails'
+gem 'momentjs-rails', '~> 2.9', github: 'derekprior/momentjs-rails'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 gem 'bootstrap-datepicker-rails'
 gem 'bootstrap-timepicker-rails'
@@ -68,7 +68,8 @@ gem 'fullcalendar-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'simple_form'
 gem 'bootstrap-sass', '>= 3.4.1'
+gem 'sassc-rails', '>= 2.1.0'
 gem 'autoprefixer-rails'
 gem 'bootstrap_form'
-gem "twitter-bootstrap-rails", :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+gem 'twitter-bootstrap-rails', github: 'seyhunak/twitter-bootstrap-rails'
 gem 'pg'

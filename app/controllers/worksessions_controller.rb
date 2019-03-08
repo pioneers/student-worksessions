@@ -150,7 +150,11 @@ class WorksessionsController < ApplicationController
       end
       booking = Booking.create(user_id: @user.id, worksession_id: @worksession.id, notes: params[:notes])
 
-      url = URI.parse('https://www.ocf.berkeley.edu/~tranjulie/wsflask/slack/')
+      if Rails.env.production?
+        url = URI.parse('https://worksessions-notifier.pierobotics.org/api/v0/signup/')
+      else
+        url = URI.parse('https://www.ocf.berkeley.edu/~tranjulie/wsflask/api/v0/signup/')
+      end
       Net::HTTP.post_form(url, {
         'notes' => booking.notes,
         'date' => @worksession.date.strftime("%m/%d/%Y"),

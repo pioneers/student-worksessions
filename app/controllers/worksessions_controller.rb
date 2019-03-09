@@ -151,7 +151,7 @@ class WorksessionsController < ApplicationController
       booking = Booking.create(user_id: @user.id, worksession_id: @worksession.id, notes: params[:notes])
 
       if Rails.env.production?
-        url = URI.parse('https://worksessions-notifier.pierobotics.org/api/v0/signup/')
+        url = URI.parse('http://worksessions-notifier.pierobotics.org/api/v0/signup/')
       else
         url = URI.parse('https://www.ocf.berkeley.edu/~tranjulie/wsflask/api/v0/signup/')
       end

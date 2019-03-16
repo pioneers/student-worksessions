@@ -9,7 +9,7 @@ class WorksessionsController < ApplicationController
   # GET /worksessions
   # GET /worksessions.json
   def index
-    @worksessions = Worksession.all
+    set_worksessions
     if params[:user_id].nil?
       @user = nil
     else
@@ -19,12 +19,12 @@ class WorksessionsController < ApplicationController
   end
 
   def tomorrow_status
-    @worksessions = Worksession.all
+    set_worksessions
     @users = User.all
   end
 
   def homepage
-    @worksessions = Worksession.all
+    set_worksessions
     @users = User.all
     if not current_user.admin?
       redirect_to available_path(current_user)
@@ -132,7 +132,7 @@ class WorksessionsController < ApplicationController
   end
 
   def available
-     @worksessions = Worksession.all
+    set_worksessions
   end
 
   # Usually by a team user
@@ -223,7 +223,7 @@ class WorksessionsController < ApplicationController
   end
 
   def get_events
-    @worksessions = Worksession.all
+    set_worksessions
     @available = []
     @worksessions.each do |worksession|
         @available << {:id => worksession.id, :title => "boop", :start => "#{worksession.begin_at.iso8601}",:end => "#{worksession.end_at.iso8601}" }
@@ -234,6 +234,13 @@ class WorksessionsController < ApplicationController
   end
 
   private
+
+    # We set the scope of worksession we interact with to only those that happened this year
+    # to increase the speed of lookups.
+    def set_worksessions
+      @worksessions = Worksession.where("begin_at >= :start_date", {:start_date => (Time.now.beginning_of_year)})
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_worksession
       @worksession = Worksession.find(params[:id])

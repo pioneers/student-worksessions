@@ -153,7 +153,7 @@ class WorksessionsController < ApplicationController
       if Rails.env.production?
         url = URI.parse('http://worksessions-notifier.pierobotics.org/api/v0/signup/')
       else
-        url = URI.parse('https://www.ocf.berkeley.edu/~tranjulie/wsflask/api/v0/signup/')
+        url = URI.parse('http://worksessions-notifier-staging.pierobotics.org/api/v0/signup/')
       end
       Net::HTTP.post_form(url, {
         'notes' => booking.notes,

@@ -1,7 +1,7 @@
 require 'net/http'
 
 class WorksessionsController < ApplicationController
-  before_action :authenticate_user!, except: [:view, :tomorrow_status]
+  before_action :authenticate_user!, except: [:view, :tomorrow_status, :get_staff_tomorrow]
   before_action :set_worksession, :set_user, only: [:show, :edit, :update, :destroy, :sign_up, :cancel]
   before_action :set_today
   respond_to :json
@@ -231,6 +231,12 @@ class WorksessionsController < ApplicationController
     respond_to do |format|
       format.json { render :json => @events }
     end
+  end
+
+  def get_staff_tomorrow
+    @available_tomorrow = Worksession.where(begin_at >= Date.tomorrow.midnight, begin_at <= Date.tomorrow.tomorrow.midnight)
+    #send to flask website
+    #how to send HTTP req to student_worksessions_notifier -- forms in RoR
   end
 
   private

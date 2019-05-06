@@ -1,7 +1,7 @@
 require 'net/http'
 
 class WorksessionsController < ApplicationController
-  before_action :authenticate_user!, except: [:view, :tomorrow_status]
+  before_action :authenticate_user!, except: [:view, :tomorrow_status, :get_staff_tomorrow]
   before_action :set_worksession, :set_user, only: [:show, :edit, :update, :destroy, :sign_up, :cancel]
   before_action :set_today
   respond_to :json
@@ -230,6 +230,23 @@ class WorksessionsController < ApplicationController
     end
     respond_to do |format|
       format.json { render :json => @events }
+    end
+  end
+
+  def get_staff_tomorrow
+    available_tomorrow = Worksession.where("begin_at >= :start_date", {:start_date => (Date.tomorrow.midnight)})
+      .where("begin_at <= :end_date", {:end_date => (Date.tomorrow.tomorrow.midnight)})
+    if Rails.env.production?
+      url = URI.parse('https://worksessions-notifier.pierobotics.org/api/v0/sheets/')
+    else
+      url = URI.parse('http://127.0.0.1:5000/api/v0/sheets/')
+    end
+    available_tomorrow.all.each do |worksession|
+      if worksession.bookings.size > 0
+        date = worksession.begin_at.strftime('%m/%d/%Y')
+        start_time = worksession.begin_at.strftime('%I:%M %p')
+        res = Net::HTTP.post_form(url, 'date' => date, 'start-time' => start_time)
+      end
     end
   end
 

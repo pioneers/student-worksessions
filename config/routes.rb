@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   # post 'worksessions/view' => 'worksessions#view', as: :views
   get '/worksessions/create_2_weeks' => 'worksessions#create_worksessions', as: :create_worksessions
   get '/users/reset_password' => 'users#reset_password', as: :reset_password
+
+  get '/worksessions/get_staff_tomorrow' => 'worksessions#get_staff_tomorrow', as: :get_staff_tomorrow
+
   resources :users do
     resources :worksessions
   end
@@ -27,7 +30,6 @@ Rails.application.routes.draw do
   end
   post '/worksessions/:id/sign_up' => 'worksessions#sign_up', as: :signup
   get '/worksessions/:id/sign_up' => 'worksessions#sign_up', as: :signUp
-
 
   get '/worksessions/:id/cancel' => 'worksessions#cancel', as: :cancel
   get '/worksessions/:worksession_id/:user_id/add_team' => 'worksessions#add_team', as: :add_team

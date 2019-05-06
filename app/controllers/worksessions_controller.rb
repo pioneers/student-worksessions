@@ -234,19 +234,20 @@ class WorksessionsController < ApplicationController
   end
 
   def get_staff_tomorrow
-    available_tomorrow = Worksession.where("begin_at >= :start_date", {:start_date => (Date.tomorrow.midnight)}).where("begin_at <= :end_date", {:end_date => (Date.tomorrow.tomorrow.midnight)})
+    available_tomorrow = Worksession.where("begin_at >= :start_date", {:start_date => (Date.tomorrow.midnight)})
+      .where("begin_at <= :end_date", {:end_date => (Date.tomorrow.tomorrow.midnight)})
     if Rails.env.production?
       url = URI.parse('https://worksessions-notifier.pierobotics.org/api/v0/sheets/')
     else
       url = URI.parse('http://127.0.0.1:5000/api/v0/sheets/')
     end
     available_tomorrow.all.each do |worksession|
-      date = worksession.begin_at.strftime('%m/%d/%Y')
-      start_time = worksession.begin_at.strftime('%I:%M %p')
-      res = Net::HTTP.post_form(url, 'date' => date, 'start-time' => start_time)
+      if worksession.bookings.size > 0
+        date = worksession.begin_at.strftime('%m/%d/%Y')
+        start_time = worksession.begin_at.strftime('%I:%M %p')
+        res = Net::HTTP.post_form(url, 'date' => date, 'start-time' => start_time)
+      end
     end
-    #send to flask website
-    #how to send HTTP req to student_worksessions_notifier -- forms in RoR
   end
 
   private
